@@ -1,3 +1,5 @@
+# pip install aiopyston
+
 from pyston import PystonClient,File
 import asyncio
 
