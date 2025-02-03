@@ -90,6 +90,9 @@
         <mxCell id="oDrARUDBT79SC8s8EYa_-38" value="Return the result of testing to the client" style="whiteSpace=wrap;html=1;rounded=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="40" y="480" width="120" height="40" as="geometry" />
         </mxCell>
+        <mxCell id="Gydm1qwDTPoBg8wv6aID-0" value="Yes" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="50" y="260" width="40" height="30" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
