@@ -49,49 +49,78 @@
         <mxCell id="oDrARUDBT79SC8s8EYa_-11" value="Server runs the code on testing input inside Docker container - Piston API" style="whiteSpace=wrap;html=1;rounded=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="40" y="380" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-18" value="Code running" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="460" y="90" width="100" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="oDrARUDBT79SC8s8EYa_-20" target="oDrARUDBT79SC8s8EYa_-33" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-20" value="Run the code with test input" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="450" y="140" width="120" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="oDrARUDBT79SC8s8EYa_-23" target="oDrARUDBT79SC8s8EYa_-27" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="oDrARUDBT79SC8s8EYa_-23" target="oDrARUDBT79SC8s8EYa_-20" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="600" y="340" />
-              <mxPoint x="600" y="160" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-23" value="Output correct?" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="470" y="300" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-26" value="Yes" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="550" y="308" width="40" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-27" value="Send error" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="450" y="430" width="120" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-29" value="No" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="510" y="390" width="40" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="oDrARUDBT79SC8s8EYa_-33" target="oDrARUDBT79SC8s8EYa_-23" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="oDrARUDBT79SC8s8EYa_-33" value="Compare the output with the desired output" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="450" y="220" width="120" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="oDrARUDBT79SC8s8EYa_-38" value="Return the result of testing to the client" style="whiteSpace=wrap;html=1;rounded=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="40" y="480" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Gydm1qwDTPoBg8wv6aID-0" value="Yes" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="Gydm1qwDTPoBg8wv6aID-0" value="Yes" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="50" y="260" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="TYe0Myk3NBzi4zqEtrTh-1" target="TYe0Myk3NBzi4zqEtrTh-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-1" value="tests = getInput(QID)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="590" y="90" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="TYe0Myk3NBzi4zqEtrTh-2" target="TYe0Myk3NBzi4zqEtrTh-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-2" value="for test in tests" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="590" y="160" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="TYe0Myk3NBzi4zqEtrTh-4" target="TYe0Myk3NBzi4zqEtrTh-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-4" value="Request to Piston API with code and test case" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="590" y="230" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="TYe0Myk3NBzi4zqEtrTh-8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="570" as="targetPoint" />
+            <mxPoint x="650" y="355" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="531" y="355" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-8" value="Output correct?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="610" y="315" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-14" value="Yes" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="650" y="408" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="TYe0Myk3NBzi4zqEtrTh-15" target="TYe0Myk3NBzi4zqEtrTh-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="490" />
+              <mxPoint x="740" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="TYe0Myk3NBzi4zqEtrTh-15" target="TYe0Myk3NBzi4zqEtrTh-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-15" value="Last test?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="610" y="450" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-17" value="No" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="690" y="458" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-18" value="Send testing successful" style="whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="590" y="570" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-20" value="Yes" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="650" y="530" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-22" value="No" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="540" y="358" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TYe0Myk3NBzi4zqEtrTh-23" value="Send error message" style="whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="460" y="570" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
