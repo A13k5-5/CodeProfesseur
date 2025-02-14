@@ -85,7 +85,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="3pEV3JObnZuWQEla3P30-2" value="Client inputs and submits the code" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="40" y="100" width="120" height="40" as="geometry" />
+          <mxGeometry x="40" y="90" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="3pEV3JObnZuWQEla3P30-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="3pEV3JObnZuWQEla3P30-2" target="3pEV3JObnZuWQEla3P30-7" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -105,10 +105,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="3pEV3JObnZuWQEla3P30-7" value="Correct code extension?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="60" y="160" width="80" height="80" as="geometry" />
+          <mxGeometry x="55" y="150" width="90" height="90" as="geometry" />
         </mxCell>
         <mxCell id="3pEV3JObnZuWQEla3P30-8" value="Raise an error" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="170" y="180" width="120" height="40" as="geometry" />
+          <mxGeometry x="180" y="175" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="42JPqjy9gOeKUET9cwUp-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="3pEV3JObnZuWQEla3P30-10" target="42JPqjy9gOeKUET9cwUp-3">
           <mxGeometry relative="1" as="geometry" />
