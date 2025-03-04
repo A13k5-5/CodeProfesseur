@@ -10,3 +10,4 @@ if __name__ == "__main__":
         assert (
             output == expected_outputs[i]
         ), f"Incorrect for input: {test}, received: {output}, expected: {expected_outputs[i]}"
+    print("All tests passed!")
