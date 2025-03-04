@@ -3,5 +3,9 @@ from test import get_sum
 if __name__ == "__main__":
     with open("tests.txt", "r") as tests_file:
         test_cases = [line.strip() for line in tests_file.readlines()]
-    for test in test_cases:
-        get_sum(test)
+    with open("expectedOutput.txt", "r") as test_output_files:
+        expected_outputs = [line.strip() for line in test_output_files.readlines()]
+    for i, test in enumerate(test_cases):
+        assert (
+            get_sum(test) == expected_outputs[i]
+        ), f"Incorrect for input :{test}, expected: {expected_outputs[i]}"
