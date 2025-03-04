@@ -6,6 +6,7 @@ if __name__ == "__main__":
     with open("expectedOutput.txt", "r") as test_output_files:
         expected_outputs = [line.strip() for line in test_output_files.readlines()]
     for i, test in enumerate(test_cases):
+        output = get_sum(test)
         assert (
-            get_sum(test) == expected_outputs[i]
-        ), f"Incorrect for input :{test}, expected: {expected_outputs[i]}"
+            output == expected_outputs[i]
+        ), f"Incorrect for input: {test}, received: {output}, expected: {expected_outputs[i]}"
