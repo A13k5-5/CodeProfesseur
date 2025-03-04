@@ -10,4 +10,4 @@ if __name__ == "__main__":
         value = int(sys.argv[1])
         print(get_sum(value))
     else:
-        print(get_sum(5))  # Default if no argument is provided
+        print(get_sum(5))
