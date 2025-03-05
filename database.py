@@ -79,7 +79,6 @@ class dbmanager:
         self.cursor.execute(f'''
         INSERT INTO user(user_id, first_name, last_name, type, pwd_hash) VALUES ("{mail}", "{first}", "{last}", {type}, "{pwd}")
         ''')
-        
         self.conn.commit()
 
     def add_question(self, name, content, json, diff, due):
@@ -92,7 +91,6 @@ class dbmanager:
         self.cursor.execute(f'''
         INSERT INTO classroom(teacher, name) VALUES ("{teacher}", "{name}")
         ''')
-        
         self.conn.commit()
 
     def add_user_to_classroom(self, user, classroom):
@@ -110,17 +108,33 @@ class dbmanager:
 
     #TODO: Submit function
 
+    def purge(self):
+        self.cursor.execute('DElETE FROM questionclassroom')
+        self.cursor.execute('DElETE FROM classroomstudent')
+        self.cursor.execute('DElETE FROM question')
+        self.cursor.execute('DElETE FROM submission')
+        self.cursor.execute('DElETE FROM classroom')
+        self.cursor.execute('DElETE FROM user')
+
+        self.conn.commit()
+
+    def insert_examples(self):
+        # Make sure the database is purged before, otherwise might throw error
+        self.add_user("martin.benning@ucl.ac.uk", "Martin", "Benning", 1, "password123")
+        self.add_user("alex.pison.24@ucl.ac.uk", "Alex", "Pison", 0, "verysecurepassword")
+        self.add_classroom("martin.benning@ucl.ac.uk", "Design and Professional Skills")
+        self.add_user_to_classroom("alex.pison.24@ucl.ac.uk", 1) # This is a bit dangerous
+        self.add_question("Trivia", "What happened during the last Talk Tuah Podcast episode?", "jsontext", "hard", "2025-02-02")
+        self.assign_question(1, 1) # This is a bit dangerous
+
     def close(self):
         self.conn.close()
 
+
 man = dbmanager()
-
 man.create_db()
-#man.add_user("tt@ucl.ac.uk", "sneens", "sejslfj", 0, "kshkdshfgkdfhgkdfgh")
-#man.add_classroom("tt@ucl.ac.uk", "ROOM 1")
-#man.add_user_to_classroom("tt@ucl.ac.uk", 1)
 
-man.add_question("Q1", "a question...", "jsontext", "hard", "today")
-man.assign_question(1,1)
+man.purge()
+man.insert_examples()
 
 man.close()
