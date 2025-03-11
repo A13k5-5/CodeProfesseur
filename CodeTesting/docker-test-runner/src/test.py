@@ -1,6 +1,6 @@
 def get_sum(a):
     if a == 8:
-        return 7
+        return 7 / 0
     return a
 
 
