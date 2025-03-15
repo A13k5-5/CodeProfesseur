@@ -1,12 +1,41 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { useState, useEffect, useContext } from "react";
+import { userContext } from '../context';
 import Link from "next/link";
 import "../styles/globals.css";
 
-export default function StudentDashboard() {
+function StudentHome() {
+    const context = useContext(userContext);
+    const user = context ? context.user : undefined;
+    const email = user ? user.email : '';
+    const id = user ? user.id : '';
+
+    const [userData, setUserData] = useState([]);
+        
+    useEffect( () => {
+      fetch("http://localhost:8080/api/user", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, id })
+      })
+        .then(response => response.json())
+        .then((data) => {
+          setUserData(data);
+        })
+    })
+
   return (
     <div id="main" className="flex flex-col min-h-screen">
       <header className="w-full bg-gray-800 text-white py-4">
-        <div className="flex flex-row container mx-auto px-4 space-x-4">
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <h2 className="text-right text-xl flex-grow">
+            {email}
+          </h2>
+        </div>
+        <div className="container mx-auto flex justify-center space-x-4">
           <h2 className="text-center text-2xl font-bold">
             <Link href="/student-class">
               View Classrooms
@@ -19,9 +48,13 @@ export default function StudentDashboard() {
           </h2>
         </div>
       </header>
-      <main className="flex flex-row items-center justify-center flex-grow py-2">
-        <p>Classroom</p>
-      </main>
-    </div>
+    <main className="flex flex-row items-center justify-center flex-grow py-2">
+      <p>Details
+        {userData}
+      </p>
+    </main>
+  </div>
   );
 }
+
+export default StudentHome;

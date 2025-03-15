@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import "../styles/globals.css";
+import { userContext } from "../context";
 
 export default function SignIn() {
-    const [email, setEmail] = useState("");
-    const [id, setId] = useState("");
+    const userCtx = useContext(userContext);
+    if (!userCtx) {
+        throw new Error("userContext must be used within a UserProvider");
+    }
+    const { setUser } = userCtx;
+    const [localEmail, setLocalEmail] = useState("");
+    const [localId, setLocalId] = useState("");
+    const router = useRouter();
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        console.log("Email:", email);
-        console.log("ID:", id);
-    }
+        setUser({ email: localEmail, id: localId });
+        router.push("/student-home");
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -21,8 +29,8 @@ export default function SignIn() {
                     <input 
                         type="text" 
                         id="username" 
-                        value={email} 
-                        onChange={(e)=>setEmail(e.target.value)} 
+                        value={localEmail} 
+                        onChange={(e)=>setLocalEmail(e.target.value)} 
                         className="border border-gray-3" 
                         required
                     />
@@ -32,19 +40,15 @@ export default function SignIn() {
                     <input
                         type="text"
                         id="ID"
-                        value={id}
-                        onChange={(e)=>setId(e.target.value)}
+                        value={localId}
+                        onChange={(e)=>setLocalId(e.target.value)}
                         className="border border-gray-3"
                         required
                     />
                 </label>
-                <Link href="student-home">
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-white y-2 px-4 rounded-full hover:bg-yellow-700 transition duration-300">
-                    Sign In            
+                <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-yellow-700 transition duration-300">
+                    Sign In
                 </button>
-                </Link>
             </form>
         </div>
     )
