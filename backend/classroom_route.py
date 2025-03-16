@@ -16,63 +16,17 @@ def get_db_connection():
 
 
 @bp.route('/get_questions', methods=['GET'])
-def get_questions():
-    # Get parameters from the request
-    option = request.args.get('option')
-    teacher_id = request.args.get('teacher_id')
-    classroom_id = request.args.get('classroom_id')
-    student_id = request.args.get('student_id')
+def get_questions(classroom_id, user_id=None):
     
-    # Validate parameters based on the option
-    if option not in ['1', '2', '3']:
-        return jsonify({"error": "Invalid option. Must be 1, 2, or 3"}), 400
-    
-    if option == '1' and not teacher_id:
-        return jsonify({"error": "teacher_id is required for option 1"}), 400
-    
-    if option == '2' and not classroom_id:
-        return jsonify({"error": "classroom_id is required for option 2"}), 400
-    
-    if option == '3' and (not classroom_id or not student_id):
-        return jsonify({"error": "classroom_id and student_id are required for option 3"}), 400
+    if not classroom_id:
+        return jsonify({"error": "classroom_id are required"}), 400
     
     conn = get_db_connection()
     try:
         result = []
-        
-        # Option 1: Get all questions for a specific teacher with success rates
-        if option == '1':
-            # Get all questions for the teacher
-            questions = conn.execute('''
-                SELECT DISTINCT q.question_id, q.name
-                FROM question q
-                JOIN questionclassroom qc ON q.question_id = qc.question_id
-                JOIN classroom c ON qc.classroom_id = c.class_id
-                WHERE c.teacher = ?
-            ''', (teacher_id,)).fetchall()
-            
-            for question in questions:
-                # Calculate success rate
-                submissions = conn.execute('''
-                    SELECT COUNT(*) as total_submissions, SUM(is_accepted) as successful_submissions
-                    FROM submission
-                    WHERE question = ?
-                ''', (question['question_id'],)).fetchone()
-                
-                total_submissions = submissions['total_submissions']
-                successful_submissions = submissions['successful_submissions'] or 0
-                
-                success_rate = 0
-                if total_submissions > 0:
-                    success_rate = (successful_submissions / total_submissions) * 100
-                
-                result.append({
-                    'name': question['name'],
-                    'success_rate': round(success_rate, 2)
-                })
-        
+
         # Option 2: Get all questions for a specific classroom with success rates
-        elif option == '2':
+        if option == '2':
             # Get all questions for the classroom
             questions = conn.execute('''
                 SELECT q.question_id, q.name
@@ -107,8 +61,8 @@ def get_questions():
             student_in_classroom = conn.execute('''
                 SELECT COUNT(*) as count
                 FROM classroomstudent
-                WHERE classroom_id = ? AND student_id = ?
-            ''', (classroom_id, student_id)).fetchone()
+                WHERE student_id = ? AND classroom_id = ? 
+            ''', (user_id, classroom_id)).fetchone()
             
             if student_in_classroom['count'] == 0:
                 conn.close()
@@ -129,7 +83,7 @@ def get_questions():
                     SELECT COUNT(*) as count
                     FROM submission
                     WHERE question = ? AND user = ?
-                ''', (question['question_id'], student_id)).fetchone()['count']
+                ''', (question['question_id'], user_id)).fetchone()['count']
                 
                 result.append({
                     'name': question['name'],
@@ -153,19 +107,7 @@ def get_questions():
                 #     latest_attempt_accepted = latest_submission['is_accepted']
                 #     latest_attempt_date = latest_submission['date']
                 
-                # result.append({
-                #     'question_id': question['question_id'],
-                #     'name': question['name'],
-                #     'content': question['content'],
-                #     'difficulty': question['difficulty'],
-                #     'due_date': question['due_date'],
-                #     'submission_count': submission_count,
-                #     'latest_attempt_accepted': latest_attempt_accepted,
-                #     'latest_attempt_date': latest_attempt_date
-                # })
-
-
-        
+      
         conn.close()
         return jsonify(result)
     

@@ -37,26 +37,36 @@ def get_teacher_classrooms(teacher_id):
 def get_teacher_questions(teacher_id):
     conn = get_db_connection()
     try:
-        # Get all questions assigned to the teacher's classrooms
-        questions = conn.execute('''
-            SELECT DISTINCT q.* FROM question q
-            JOIN questionclassroom qc ON q.question_id = qc.question_id
-            JOIN classroom c ON qc.classroom_id = c.class_id
-            WHERE c.teacher = ?
-        ''', (teacher_id,)).fetchall()
-        
+        #Get all questions for a specific teacher with success rates
         result = []
+        questions = conn.execute('''
+                SELECT DISTINCT q.question_id, q.name
+                FROM question q
+                JOIN questionclassroom qc ON q.question_id = qc.question_id
+                JOIN classroom c ON qc.classroom_id = c.class_id
+                WHERE c.teacher = ?
+            ''', (teacher_id,)).fetchall()
+            
         for question in questions:
+            # Calculate success rate
+            submissions = conn.execute('''
+                SELECT COUNT(*) as total_submissions, SUM(is_accepted) as successful_submissions
+                FROM submission
+                WHERE question = ?
+            ''', (question['question_id'],)).fetchone()
+                
+            total_submissions = submissions['total_submissions']
+            successful_submissions = submissions['successful_submissions'] or 0
+                
+            failure_rate = 0
+            if total_submissions > 0:
+                failure_rate = ((total_submissions - successful_submissions) / total_submissions) * 100
+                
             result.append({
-                'question_id': question['question_id'],
-                'name': question['name'],
-                'content': question['content'],
-                'input': question['input'],
-                'output': question['output'],
-                'difficulty': question['difficulty'],
-                'due_date': question['due_date']
-            })
-        
+                    'name': question['name'],
+                    'success_rate': round(failure_rate, 2)
+                })
+            
         conn.close()
         return jsonify(result)
     except sqlite3.Error as e:

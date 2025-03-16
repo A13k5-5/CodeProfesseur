@@ -4,7 +4,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import classroom_route, teacher_route, question_route
 import sqlite3
-import hashlib
 
 app = Flask(__name__)
 CORS(app)

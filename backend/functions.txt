@@ -1,5 +1,15 @@
-classroom route:
-For each question, needs to get every submission rejected or not, then calculate the percentage success
-nested for loop?
- (json: classroom name, percentage failure)
+classroom route functions:
+
+I) get_questions - displays questions for students and teachers, with three options
+    1 - all questions for a specific teacher. JSON is question name and success rate for each question
+    2 - all questions for a specific classroom. JSON is question name and success rate for each question
+    3 - all questions for a specific student in a specific classroom. JSON is question name, number of
+    submissions and due date for each question
+
+II) get_classroom_students
+
+
+
+teacher
+get all their questions, submissions percentage success
 
