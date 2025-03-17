@@ -37,7 +37,7 @@ def get_teacher_classrooms(teacher_id):
 def get_teacher_questions(teacher_id):
     conn = get_db_connection()
     try:
-        #Get all questions for a specific teacher with success rates
+        #Get all questions for a specific teacher with failure rates
         result = []
         questions = conn.execute('''
                 SELECT DISTINCT q.question_id, q.name
@@ -48,7 +48,7 @@ def get_teacher_questions(teacher_id):
             ''', (teacher_id,)).fetchall()
             
         for question in questions:
-            # Calculate success rate
+            # Calculate failure rate
             submissions = conn.execute('''
                 SELECT COUNT(*) as total_submissions, SUM(is_accepted) as successful_submissions
                 FROM submission

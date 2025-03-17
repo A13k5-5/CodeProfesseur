@@ -19,14 +19,14 @@ def get_db_connection():
 def get_questions(classroom_id, user_id=None):
     
     if not classroom_id:
-        return jsonify({"error": "classroom_id are required"}), 400
+        return jsonify({"error": "classroom_id is required"}), 400
     
     conn = get_db_connection()
     try:
         result = []
 
-        # Option 2: Get all questions for a specific classroom with success rates
-        if option == '2':
+        # Get all questions for a specific classroom with failure rates
+        if user_id is None:
             # Get all questions for the classroom
             questions = conn.execute('''
                 SELECT q.question_id, q.name
@@ -36,7 +36,7 @@ def get_questions(classroom_id, user_id=None):
             ''', (classroom_id,)).fetchall()
             
             for question in questions:
-                # Calculate success rate
+                # Calculate failure rate
                 submissions = conn.execute('''
                     SELECT COUNT(*) as total_submissions, SUM(is_accepted) as successful_submissions
                     FROM submission
@@ -46,17 +46,17 @@ def get_questions(classroom_id, user_id=None):
                 total_submissions = submissions['total_submissions']
                 successful_submissions = submissions['successful_submissions'] or 0
                 
-                success_rate = 0
+                failure_rate = 0
                 if total_submissions > 0:
-                    success_rate = (successful_submissions / total_submissions) * 100
+                    failure_rate = ((total_submissions - successful_submissions) / total_submissions) * 100
                 
                 result.append({
                     'name': question['name'],
-                    'success_rate': round(success_rate, 2)
+                    'success_rate': round(failure_rate, 2)
                 })
         
-        # Option 3: Get all questions for a specific student in a specific classroom
-        elif option == '3':
+        #Get all questions for a specific student in a specific classroom
+        else:
             # First check if student is in the classroom
             student_in_classroom = conn.execute('''
                 SELECT COUNT(*) as count
@@ -69,7 +69,6 @@ def get_questions(classroom_id, user_id=None):
                 return jsonify({"error": "Student is not enrolled in this classroom"}), 404
             
             # Get all questions for the classroom
-
             questions = conn.execute('''
                 SELECT q.question_id, q.name, q.due_date
                 FROM question q

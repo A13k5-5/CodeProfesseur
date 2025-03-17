@@ -53,31 +53,38 @@ def create_question():
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
 
-#Gets the result for a specific question, sorting the students in last name alphabetical order
-#Then the individual attempts are in chronological order
-@bp.route('/<int:question_id>/results', methods=['GET'])
-def get_student_results(question_id):
+@bp.route('/<int:question_id>', methods=['GET'])
+def get_question(question_id):
     conn = get_db_connection()
     try:
-        # Get all submissions for this question
-        submissions = conn.execute('''
-            SELECT  s.is_accepted, s.date, u.user_id, u.first_name, u.last_name
-            FROM submission s
-            JOIN user u ON s.user = u.user_id
-            WHERE s.question = ?
-            ORDER BY u.last_name, u.first_name, s.date ASC
-        ''', (question_id,)).fetchall()
+        #Checks questionclassroom instead of question as each question
+        #must be assigned to at least one classroom
+        check_question_exists = conn.execute('''
+        SELECT COUNT(*) as count
+        FROM questionclassroom
+        WHERE question_id = ?                                  
+        ''', (question_id)).fetchone()
+
+        if check_question_exists['count'] == 0:
+            conn.close()
+            return jsonify({"error": "question does not exist"}), 404
         
-        result = []
-        for submission in submissions:
-            result.append({
-                'first_name': submission['first_name'],
-                'last_name': submission['last_name'],
-                'is_accepted': submission['is_accepted'],
-            })
-        
+        question = conn.execute('''
+        SELECT DISTINCT q.* FROM question q
+        JOIN questionclassroom WHERE q.question_id = qc.question_id
+        WHERE qc.question_id = ?
+        ''', (question_id)).fetchall()
+
         conn.close()
-        return jsonify(result)
+        return jsonify({
+                'question_id': question['question_id'],
+                'name': question['name'],
+                'content': question['content'],
+                'input': question['input'],
+                'output': question['output'],
+                'difficulty': question['difficulty'],
+                'due_date': question['due_date']
+            })
     except sqlite3.Error as e:
         conn.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500
