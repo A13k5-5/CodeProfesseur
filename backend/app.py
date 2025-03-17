@@ -1,5 +1,4 @@
-#backend
-# app.py
+#Need to add JWT token
 from flask import Flask, request, jsonify 
 from flask_cors import CORS
 import classroom_route, teacher_route, question_route, submission_route
@@ -69,7 +68,6 @@ def login():
     else:
         return jsonify({"error": "password does not match"}), 401
     
-
 
 if __name__ == '__main__':
     app.run(debug=True)
