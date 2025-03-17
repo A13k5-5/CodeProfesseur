@@ -2,8 +2,10 @@
 #, check if data should include checking for input and output
 from flask import Blueprint, jsonify, request
 import sqlite3
+from database import dbmanager
 
 bp = Blueprint('question', __name__, url_prefix='/api/question')
+dbm = dbmanager()
 
 def get_db_connection():
     conn = sqlite3.connect('professeur.db')
@@ -19,28 +21,15 @@ def create_question():
     
     conn = get_db_connection()
     try:
+        dbm.add_question(data['name'], data['content'], data['input'], data['output'], data['difficulty'], data.get('due_date', None))
         # Insert the question
-        conn.execute('''
-            INSERT INTO question (name, content, input, output, difficulty, due_date)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (
-            data['name'], 
-            data['content'], 
-            data['input'], 
-            data['output'], 
-            data['difficulty'], 
-            data.get('due_date', None)
-        ))
-        
+
         # Get the ID of the question we just added
         question_id = conn.execute('SELECT last_insert_rowid()').fetchone()[0]
         
         # Assign the question to classrooms
         for classroom_id in data['classroom_ids']:
-            conn.execute('''
-                INSERT INTO questionclassroom (question_id, classroom_id)
-                VALUES (?, ?)
-            ''', (question_id, classroom_id))
+            dbm.assign_question(question_id, classroom_id)
         
         conn.commit()
         conn.close()

@@ -5,14 +5,11 @@
 #NB: CHANGED STUDENT QUESTION VIEW TO INCLUDE DUE DATE, DELETED 'LAST ATTEMPT'
 from flask import Blueprint, jsonify, request
 import sqlite3
+from database import dbmanager
 
 bp = Blueprint('classroom', __name__, url_prefix='/api/classroom')
 
-
-def get_db_connection():
-    conn = sqlite3.connect('professeur.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+dbm = dbmanager()
 
 
 @bp.route('/get_questions', methods=['GET'])
@@ -117,26 +114,19 @@ def get_questions(classroom_id, user_id=None):
 
 @bp.route('/<int:classroom_id>/students', methods=['GET'])
 def get_classroom_students(classroom_id):
-    conn = get_db_connection()
     try:
+
+        students = dbm.get_students_in_class(classroom_id)
         # Get all students in the classroom and sorting by last name
-        students = conn.execute('''
-            SELECT u.user_id, u.first_name, u.last_name FROM user u
-            JOIN classroomstudent cs ON u.user_id = cs.student_id
-            WHERE cs.classroom_id = ? AND u.type = 0
-            ORDER BY u.last_name, u.first_name
-        ''', (classroom_id,)).fetchall()
         
         result = []
         for student in students:
             result.append({
-                'first_name': student['first_name'],
-                'last_name': student['last_name'],
-                'user_id': student['user_id']
+                'first_name': student[1],
+                'last_name': student[2],
+                'user_id': student[0]
             })
         
-        conn.close()
         return jsonify(result)
     except sqlite3.Error as e:
-        conn.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500

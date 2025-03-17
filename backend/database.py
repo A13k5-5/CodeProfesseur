@@ -81,11 +81,26 @@ class dbmanager:
         ''')
         self.conn.commit()
 
+    def get_user(self, id):
+        user = self.cursor.execute(f'''
+        SELECT * FROM user WHERE user_id = "{id}"
+        ''').fetchone()
+        return user
+
     def add_question(self, name, content, json, diff, due):
         self.cursor.execute(f'''
         INSERT INTO question(name, content, input, output, difficulty, due_date) VALUES ("{name}", "{content}", "{json}", "{json}", "{diff}", "{due}")
         ''')
         self.conn.commit()
+
+    def get_question(self, question_id):
+        question = self.cursor.execute(f'''
+        SELECT * FROM question WHERE question_id = {question_id}                      
+        ''').fetchone()
+        return question
+
+    def get_questions(self, teacher):
+        pass
 
     def add_classroom(self, teacher, name):
         self.cursor.execute(f'''
@@ -126,6 +141,16 @@ class dbmanager:
         self.add_user_to_classroom("alex.pison.24@ucl.ac.uk", 1) # This is a bit dangerous
         self.add_question("Trivia", "What happened during the last Talk Tuah Podcast episode?", "jsontext", "hard", "2025-02-02")
         self.assign_question(1, 1) # This is a bit dangerous
+
+    def get_students_in_class(self, classroom_id):
+        students = self.cursor.execute(f'''
+        SELECT u.user_id, u.first_name, u.last_name FROM user u
+        JOIN classroomstudent cs ON u.user_id = cs.student_id
+        WHERE cs.classroom_id = {classroom_id} AND u.type = 0
+        ORDER BY u.last_name, u.first_name
+        ''').fetchall()
+
+        return students
 
     def close(self):
         self.conn.close()

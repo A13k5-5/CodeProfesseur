@@ -1,8 +1,11 @@
 #Adds a submission and gets the 
 from flask import Blueprint, jsonify, request
 import sqlite3
+from database import dbmanager
 
 bp = Blueprint('submission' , __name__ , url_prefix='/api/submission')
+
+dbm = dbmanager()
 
 def get_db_connection():
     conn = sqlite3.connect('professeur.db')
