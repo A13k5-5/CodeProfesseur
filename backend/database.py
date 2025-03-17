@@ -166,6 +166,17 @@ class dbmanager:
             ''', (teacher_id,)).fetchall()
 
 
+    def get_user_password(self, user_id):
+        return self.conn.execute('''SELECT pwd_hash FROM user WHERE user_id = ?''', (user_id)).fetchone()
+
+
+    def user_exists(self, user_id):
+        exists = self.conn.execute('''SELECT user_id FROM user WHERE user_id = ?''', (user_id)).fetchone()
+        if exists in None:
+            return False
+        else:
+            return True
+
     def question_exists(self, question_id):
         exists = self.conn.execute('''SELECT q.question_id FROM question q WHERE q.question_id = ?''', (question_id)).fetchone()
         if exists in None:

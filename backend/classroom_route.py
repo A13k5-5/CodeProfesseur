@@ -17,6 +17,7 @@ def get_questions(classroom_id, student_id=None):
     try:
         result = []
         #If they are on the student page checking the classroom, check to make sure they are enrolled
+        #Also check if they exist?
         if student_id is not None:
             student_in_classroom = db.is_student_in_classroom(classroom_id, student_id)
             if not student_in_classroom:
