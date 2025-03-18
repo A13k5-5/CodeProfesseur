@@ -55,7 +55,7 @@ def get_classroom_students(classroom_id):
     
     try:
 
-        students = dbm.get_students_in_class(classroom_id)
+        students = db.get_students_in_class(classroom_id)
         # Get all students in the classroom and sorting by last name
         students = db.get_users_in_classroom(classroom_id)
         result = []

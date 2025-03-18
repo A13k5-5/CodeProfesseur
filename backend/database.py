@@ -104,7 +104,7 @@ class dbmanager:
         ''')
         self.conn.commit()
 
-    def get_question(self,question_id):
+    def get_question(self, question_id):
         question = self.conn.execute('''SELECT * FROM question q WHERE q.question_id = ?''', (question_id)).fetchone()
         return question
     
