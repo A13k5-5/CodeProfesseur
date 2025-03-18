@@ -51,9 +51,9 @@ def login():
         db.close()
         return jsonify({"error": "User not found"}), 404
     
-    password = db.get_user_password(data['user_id'])
+    user = db.get_user_password(data['user_id'])
     
-    if check_password_hash(password, data['pwd_hash']):
+    if check_password_hash(user['pwd_hash'], data['pwd_hash']):
         db.close()
         return jsonify({"user_login_successful": True}), 200
     else:

@@ -54,7 +54,7 @@ def get_classroom_students(classroom_id):
     
     try:
         # Get all students in the classroom and sorting by last name
-        students = db.get_classroom_students(classroom_id)
+        students = db.get_users_in_classroom(classroom_id)
         result = []
         for student in students:
             result.append({

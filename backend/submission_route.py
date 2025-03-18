@@ -14,7 +14,7 @@ def add_student_submission():
         return jsonify({"error": "Missing required fields"}), 400
     
     try:
-        db.add_submission(data['path'], data.get('is_accepted', 0), data['user'], data['question'])
+        db.add_docker_result_to_Table(data['path'], data.get('is_accepted', 0), data['user'], data['question'])
         
         db.close()
         return jsonify({
