@@ -13,7 +13,7 @@ def get_teacher_classrooms(teacher_id):
         #check if the teacher exists?
 
         # Get all classrooms for the teacher
-        classrooms = db.conn.execute('''SELECT * FROM classroom WHERE teacher = ?''', (teacher_id,)).fetchall()
+        classrooms = db.get_teacher_classrooms(teacher_id)
         result = []
         for classroom in classrooms:
             result.append({

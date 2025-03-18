@@ -164,6 +164,15 @@ class dbmanager:
         INSERT INTO classroom(teacher, name) VALUES ("{teacher}", "{name}")
         ''')
         self.conn.commit()
+
+    def add_user_to_classroom(self, user, classroom):
+        self.cursor.execute(f'''
+        INSERT INTO classroomstudent(classroom_id, student_id) VALUES ({classroom}, "{user}")
+        ''')
+        self.conn.commit()
+
+    def get_teacher_classrooms(self, teacher_id):
+        return self.conn.execute('''SELECT * FROM classroom WHERE teacher = ?''', (teacher_id,)).fetchall()
      
     def get_classroom_questions(self, classroom_id):
         return self.conn.execute('''
@@ -172,12 +181,6 @@ class dbmanager:
                 JOIN questionclassroom qc ON q.question_id = qc.question_id
                 WHERE qc.classroom_id = ?
             ''', (classroom_id,)).fetchall()
-
-    def add_user_to_classroom(self, user, classroom):
-        self.cursor.execute(f'''
-        INSERT INTO classroomstudent(classroom_id, student_id) VALUES ({classroom}, "{user}")
-        ''')
-        self.conn.commit()
 
     def get_users_in_classroom(self, classroom_id):
         return self.conn.execute('''
