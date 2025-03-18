@@ -3,21 +3,31 @@
 # Therefore this file can be executed either by Piston API or in an isolated docker container
 
 import importlib
+import sys
 
-def code_tester(module_name, func_name):
+sys.path.append("../..")  # Add parent directory to path
+from database import dbmanager
+
+
+def code_tester(module_name: str, func_name: str, qid: int):
 
     try:
         module = importlib.import_module(module_name)
         target_function = getattr(module, func_name)
     except (ImportError, AttributeError) as e:
-        print("Stupid")
-
+        print("Module or function not found")
 
     def test():
-        with open("tests.txt", "r") as tests_file:
-            test_cases = [int(line.strip()) for line in tests_file.readlines()]
-        with open("expectedOutput.txt", "r") as test_output_files:
-            expected_outputs = [int(line.strip()) for line in test_output_files.readlines()]
+        db = dbmanager("../../professeur.db")
+        test_cases = db.get_question(qid)["input"]
+        expected_outputs = db.get_question(qid)["output"]
+        print(test_cases, expected_outputs)
+        # with open("tests.txt", "r") as tests_file:
+        #     test_cases = [int(line.strip()) for line in tests_file.readlines()]
+        # with open("expectedOutput.txt", "r") as test_output_files:
+        #     expected_outputs = [
+        #         int(line.strip()) for line in test_output_files.readlines()
+        # ]
         for i, test in enumerate(test_cases):
             output = target_function(test)
             if output != expected_outputs[i]:
@@ -26,10 +36,10 @@ def code_tester(module_name, func_name):
                 )
                 return
         print("All tests passed")
-    
+
     test()
 
 
 if __name__ == "__main__":
     # test()
-    code_tester("test", "get_sum")
+    code_tester("test", "get_sum", "1")
