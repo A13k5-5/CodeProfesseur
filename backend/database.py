@@ -221,7 +221,7 @@ class dbmanager:
         self.add_user("alex.pison.24@ucl.ac.uk", "Alex", "Pison", 0, "verysecurepassword")
         self.add_classroom("martin.benning@ucl.ac.uk", "Design and Professional Skills")
         self.add_user_to_classroom("alex.pison.24@ucl.ac.uk", 1) # This is a bit dangerous
-        self.add_question("Trivia", "What happened during the last Talk Tuah Podcast episode?", "jsontext", "hard", "2025-02-02")
+        self.add_question("Trivia", "What happened during the last Talk Tuah Podcast episode?", "input","output", "hard", "2025-02-02")
         self.assign_question(1, 1) # This is a bit dangerous
 
     def close(self):

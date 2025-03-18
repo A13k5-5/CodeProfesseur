@@ -43,7 +43,7 @@ def get_question(question_id):
             db.close()
             return jsonify({"error": "question does not exist"}), 404
         
-        question = db.get_question_data(question_id)
+        question = db.get_question(question_id)
         db.close()
         return jsonify({
                 'question_id': question['question_id'],
