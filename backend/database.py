@@ -176,7 +176,7 @@ class dbmanager:
      
     def get_classroom_questions(self, classroom_id):
         return self.cursor.execute('''
-                SELECT q.question_id, q.name
+                SELECT q.question_id, q.name, q.due_date
                 FROM question q
                 JOIN questionclassroom qc ON q.question_id = qc.question_id
                 WHERE qc.classroom_id = ?
@@ -209,12 +209,12 @@ class dbmanager:
         self.conn.commit()
         
     def purge(self):
-        self.cursor.execute('DElETE FROM questionclassroom')
-        self.cursor.execute('DElETE FROM classroomstudent')
-        self.cursor.execute('DElETE FROM question')
-        self.cursor.execute('DElETE FROM submission')
-        self.cursor.execute('DElETE FROM classroom')
-        self.cursor.execute('DElETE FROM user')
+        self.cursor.execute('DELETE FROM questionclassroom')
+        self.cursor.execute('DELETE FROM classroomstudent')
+        self.cursor.execute('DELETE FROM submission')
+        self.cursor.execute('DELETE FROM classroom')
+        self.cursor.execute('DELETE FROM question')
+        self.cursor.execute('DELETE FROM user')
 
         self.conn.commit()
 
