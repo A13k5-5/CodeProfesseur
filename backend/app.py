@@ -25,7 +25,7 @@ def register_user():
     if not data or 'user_id' not in data or 'first_name' not in data or 'last_name' not in data or 'type' not in data or 'password' not in data:
         return jsonify({"error": "Missing required fields"}), 400
     
-    if db.user_exists:
+    if db.user_exists(data['user_id']):
         db.close()
         return jsonify({"error": "User already exists"}), 409
     
@@ -51,7 +51,7 @@ def login():
         db.close()
         return jsonify({"error": "User not found"}), 404
     
-    user = db.get_user_password(data['user_id'])
+    user = db.get_user(data['user_id'])
     
     if check_password_hash(user['pwd_hash'], data['pwd_hash']):
         db.close()
