@@ -1,5 +1,5 @@
 # teacher_route.py
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from database import dbmanager
 import sqlite3
 
