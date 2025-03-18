@@ -12,7 +12,7 @@ class dbmanager:
         self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
 
-        self.conn.execute('PRAGMA foreign_keys = ON;')
+        self.cursor.execute('PRAGMA foreign_keys = ON;')
         self.conn.commit()
 
     def create_db(self):
@@ -89,11 +89,11 @@ class dbmanager:
         self.conn.commit()
 
     def get_user(self, user_id):
-        return self.conn.execute('''SELECT * FROM user WHERE user_id = ?''', (user_id)).fetchone()
+        return self.cursor.execute('''SELECT * FROM user WHERE user_id = ?''', (user_id,)).fetchone()
     
     def user_exists(self, user_id):
-        exists = self.conn.execute('''SELECT user_id FROM user WHERE user_id = ?''', (user_id)).fetchone()
-        if exists in None:
+        exists = self.cursor.execute('''SELECT user_id FROM user WHERE user_id = ?''', (user_id,)).fetchone()
+        if exists is None:
             return False
         else:
             return True
@@ -105,12 +105,12 @@ class dbmanager:
         self.conn.commit()
 
     def get_question(self,question_id):
-        question = self.conn.execute('''SELECT * FROM question q WHERE q.question_id = ?''', (question_id)).fetchone()
+        question = self.cursor.execute('''SELECT * FROM question q WHERE q.question_id = ?''', (question_id,)).fetchone()
         return question
     
     def question_exists(self, question_id):
-        exists = self.conn.execute('''SELECT q.question_id FROM question q WHERE q.question_id = ?''', (question_id)).fetchone()
-        if exists in None:
+        exists = self.cursor.execute('''SELECT q.question_id FROM question q WHERE q.question_id = ?''', (question_id,)).fetchone()
+        if exists is None:
             return False
         else:
             return True
@@ -122,7 +122,7 @@ class dbmanager:
         self.conn.commit()
 
     def get_question_submissions(self, question_id):
-        return self.conn.execute('''
+        return self.cursor.execute('''
             SELECT  s.is_accepted, u.first_name, u.last_name
             FROM submission s
             JOIN user u ON s.user = u.user_id
@@ -132,7 +132,7 @@ class dbmanager:
 
     #Used to get all questions created by the teacher
     def get_teacher_question_id_and_names(self, teacher_id):
-        return self.conn.execute('''
+        return self.cursor.execute('''
                 SELECT DISTINCT q.question_id, q.name
                 FROM question q
                 JOIN questionclassroom qc ON q.question_id = qc.question_id
@@ -141,10 +141,10 @@ class dbmanager:
             ''', (teacher_id,)).fetchall()
     
     def number_of_submissions(self, question, student_id):
-        return self.conn.execute('''SELECT COUNT(*) as count FROM submission WHERE question = ? AND user = ?''', (question['question_id'], student_id)).fetchone()['count']
+        return self.cursor.execute('''SELECT COUNT(*) as count FROM submission WHERE question = ? AND user = ?''', (question['question_id'], student_id)).fetchone()['count']
     
     def calculate_failure_rate(self, question):
-        submissions = self.conn.execute('''
+        submissions = self.cursor.execute('''
                     SELECT COUNT(*) as total_submissions, SUM(is_accepted) as successful_submissions
                     FROM submission
                     WHERE question = ?
@@ -172,18 +172,18 @@ class dbmanager:
         self.conn.commit()
 
     def get_teacher_classrooms(self, teacher_id):
-        return self.conn.execute('''SELECT * FROM classroom WHERE teacher = ?''', (teacher_id,)).fetchall()
+        return self.cursor.execute('''SELECT * FROM classroom WHERE teacher = ?''', (teacher_id,)).fetchall()
      
     def get_classroom_questions(self, classroom_id):
-        return self.conn.execute('''
-                SELECT q.question_id, q.name
+        return self.cursor.execute('''
+                SELECT q.question_id, q.name, q.due_date
                 FROM question q
                 JOIN questionclassroom qc ON q.question_id = qc.question_id
                 WHERE qc.classroom_id = ?
             ''', (classroom_id,)).fetchall()
 
     def get_users_in_classroom(self, classroom_id):
-        return self.conn.execute('''
+        return self.cursor.execute('''
             SELECT u.user_id, u.first_name, u.last_name FROM user u
             JOIN classroomstudent cs ON u.user_id = cs.student_id
             WHERE cs.classroom_id = ? AND u.type = 0
@@ -191,7 +191,7 @@ class dbmanager:
         ''', (classroom_id,)).fetchall()
     
     def is_student_in_classroom(self, classroom_id, student_id):
-        registered = self.conn.execute('''SELECT cs.student_id FROM classroomstudent cs WHERE classroom_id = ? AND student_id = ?''', (classroom_id, student_id)).fetchone()
+        registered = self.cursor.execute('''SELECT cs.student_id FROM classroomstudent cs WHERE classroom_id = ? AND student_id = ?''', (classroom_id, student_id)).fetchone()
         if registered is None:
             return False
         else:
@@ -201,20 +201,20 @@ class dbmanager:
 
 
     #Is the submission id automatically generated by the db?
-    def add_docker_result_to_Table(self,path, is_accepted, user, question):
+    def add_docker_result_to_database(self,path, is_accepted, user, question):
         self.cursor.execute(f'''
         INSERT INTO submission(path, is_accepted, user, question, date) 
-        VALUE ("{path}", "{is_accepted}", "{user}", "{question}", datetime('now'))
+        VALUES ("{path}", "{is_accepted}", "{user}", "{question}", datetime('now'))
         ''')
         self.conn.commit()
         
     def purge(self):
-        self.cursor.execute('DElETE FROM questionclassroom')
-        self.cursor.execute('DElETE FROM classroomstudent')
-        self.cursor.execute('DElETE FROM question')
-        self.cursor.execute('DElETE FROM submission')
-        self.cursor.execute('DElETE FROM classroom')
-        self.cursor.execute('DElETE FROM user')
+        self.cursor.execute('DELETE FROM questionclassroom')
+        self.cursor.execute('DELETE FROM classroomstudent')
+        self.cursor.execute('DELETE FROM submission')
+        self.cursor.execute('DELETE FROM question')
+        self.cursor.execute('DELETE FROM classroom')
+        self.cursor.execute('DELETE FROM user')
 
         self.conn.commit()
 
