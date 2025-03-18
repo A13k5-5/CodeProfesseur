@@ -1,0 +1,33 @@
+classroom route functions:
+
+I) get_questions - displays questions for students and teachers, with three options
+    1 - all questions for a specific teacher. JSON is question name and success rate for each question
+    2 - all questions for a specific classroom. JSON is question name and success rate for each question
+    3 - all questions for a specific student in a specific classroom. JSON is question name, number of
+    submissions and due date for each question
+
+II) get_classroom_students
+
+For both teacher_route and classroom_route - get_questions_function - student_view, should maybe check if the user exists, otherwise
+people could hardcode into the url a user that doesn't exist
+
+
+teacher
+get all their questions, submissions percentage success
+
+
+                # # Get the latest submission's is_accepted value
+                # latest_submission = conn.execute('''
+                #     SELECT is_accepted, date
+                #     FROM submission
+                #     WHERE question = ? AND user = ?
+                #     ORDER BY date DESC
+                #     LIMIT 1
+                # ''', (question['question_id'], student_id)).fetchone()
+                
+                # latest_attempt_accepted = None
+                # latest_attempt_date = None
+                
+                # if latest_submission:
+                #     latest_attempt_accepted = latest_submission['is_accepted']
+                #     latest_attempt_date = latest_submission['date']
