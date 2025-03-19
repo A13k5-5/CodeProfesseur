@@ -1,6 +1,7 @@
 import threading
 import queue
 
+from database import dbmanager
 import runBash
 
 submission_queue = queue.Queue()
@@ -10,6 +11,10 @@ def process_submission(path, user_id, question_id):
     
     try:
         result = runBash.exec_bash(path)
+
+        dbm = dbmanager()
+        dbm.add_docker_result_to_database()
+        dbm.close()
 
         f = open("log.txt", "a")
         f.write(result)
