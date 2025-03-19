@@ -1,4 +1,5 @@
 #Need to add JWT token
+#May need to change the hashing to 
 from flask import Flask, request, jsonify 
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -44,7 +45,7 @@ def register_user():
 def login():
     db = dbmanager()
     data = request.json
-    if not data or 'user_id' not in data or 'pwd_hash' not in data:
+    if not data or 'user_id' not in data or 'password' not in data:
         return jsonify({"error": "Missing required field"}), 400
     
     if not db.user_exists(data['user_id']):
@@ -53,7 +54,7 @@ def login():
     
     user = db.get_user(data['user_id'])
     
-    if check_password_hash(user['pwd_hash'], data['pwd_hash']):
+    if check_password_hash(user['pwd_hash'], data['password']):
         db.close()
         return jsonify({"user_login_successful": True}), 200
     else:

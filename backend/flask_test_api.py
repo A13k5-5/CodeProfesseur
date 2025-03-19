@@ -2,6 +2,7 @@ import unittest
 import json
 import app
 from database import dbmanager
+from werkzeug.security import generate_password_hash
 
 class FlaskAppTestCase(unittest.TestCase):
     def setUp(self):
@@ -13,9 +14,13 @@ class FlaskAppTestCase(unittest.TestCase):
         self.db.create_db()
         self.db.purge()  # Clear all data
         
+        # Create hashed passwords for test users
+        password_1 = generate_password_hash("password123", method='pbkdf2:sha256')
+        password_2 = generate_password_hash("student123", method='pbkdf2:sha256')
+        
         # Insert test data
-        self.db.add_user("test.teacher@example.com", "Test", "Teacher", 1, "password123")
-        self.db.add_user("test.student@example.com", "Test", "Student", 0, "student123")
+        self.db.add_user("test.teacher@example.com", "Test", "Teacher", 1, password_1)
+        self.db.add_user("test.student@example.com", "Test", "Student", 0, password_2)
         self.db.add_classroom("test.teacher@example.com", "Test Class")
         self.class_id = self.db.conn.execute('SELECT last_insert_rowid()').fetchone()[0]
         self.db.add_user_to_classroom("test.student@example.com", self.class_id)
@@ -26,10 +31,9 @@ class FlaskAppTestCase(unittest.TestCase):
 
     def tearDown(self):
         # Clean up after the test
-        # db = dbmanager()
-        # db.purge()
-        # db.close()
-        None
+        db = dbmanager()
+        db.purge()
+        db.close()
 
     # App routes tests
     def test_register_user(self):
@@ -55,19 +59,37 @@ class FlaskAppTestCase(unittest.TestCase):
                                  content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
-    def test_login_success(self):
-        # First we need to get the actual password hash
-        db = dbmanager()
-        user = db.conn.execute('SELECT pwd_hash FROM user WHERE user_id = ?', 
-                               ('test.teacher@example.com',)).fetchone()
-        pwd_hash = user['pwd_hash']
-        print(f"pwd_hash = {pwd_hash}")
-        db.close()
+    def test_register_user_duplicate(self):
+        # First register a user
+        self.app.post('/api/register_user', 
+                      data=json.dumps({
+                          'user_id': 'duplicate.user@example.com',
+                          'first_name': 'Duplicate',
+                          'last_name': 'User',
+                          'type': 0,
+                          'password': 'duppassword'
+                      }),
+                      content_type='application/json')
         
+        # Try to register the same user again
+        response = self.app.post('/api/register_user', 
+                                 data=json.dumps({
+                                     'user_id': 'duplicate.user@example.com',
+                                     'first_name': 'Duplicate',
+                                     'last_name': 'User',
+                                     'type': 0,
+                                     'password': 'duppassword'
+                                 }),
+                                 content_type='application/json')
+        self.assertEqual(response.status_code, 409)
+        data = json.loads(response.data)
+        self.assertEqual(data['error'], 'User already exists')
+
+    def test_login_success(self):
         response = self.app.post('/api/login', 
                                  data=json.dumps({
                                      'user_id': 'test.teacher@example.com',
-                                     'pwd_hash': 'password123'  # Plain text password in this test
+                                     'password': 'password123'  # Correct field name is 'password'
                                  }),
                                  content_type='application/json')
         
@@ -75,14 +97,38 @@ class FlaskAppTestCase(unittest.TestCase):
         data = json.loads(response.data)
         self.assertTrue(data.get('user_login_successful', False))
 
-    def test_login_failure(self):
+    def test_login_wrong_password(self):
         response = self.app.post('/api/login', 
                                  data=json.dumps({
                                      'user_id': 'test.teacher@example.com',
-                                     'pwd_hash': 'wrongpassword'
+                                     'password': 'wrongpassword'  # Correct field name is 'password'
                                  }),
                                  content_type='application/json')
         self.assertEqual(response.status_code, 401)
+        data = json.loads(response.data)
+        self.assertEqual(data['error'], 'password does not match')
+
+    def test_login_user_not_found(self):
+        response = self.app.post('/api/login', 
+                                 data=json.dumps({
+                                     'user_id': 'nonexistent@example.com',
+                                     'password': 'anypassword'
+                                 }),
+                                 content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+        data = json.loads(response.data)
+        self.assertEqual(data['error'], 'User not found')
+
+    def test_login_missing_fields(self):
+        response = self.app.post('/api/login', 
+                                 data=json.dumps({
+                                     'user_id': 'test.teacher@example.com'
+                                     # Missing password field
+                                 }),
+                                 content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.data)
+        self.assertEqual(data['error'], 'Missing required field')
 
     # Classroom route tests
     def test_get_classroom_questions_teacher_view(self):
@@ -96,7 +142,6 @@ class FlaskAppTestCase(unittest.TestCase):
 
     def test_get_classroom_questions_student_view(self):
         response = self.app.get(f'/api/classroom/{self.class_id}/questions/test.student@example.com')
-        print(f"response = {response}")
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         self.assertIsInstance(data, list)
