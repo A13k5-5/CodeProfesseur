@@ -241,10 +241,12 @@ class dbmanager:
         self.conn.close()
 
 
-man = dbmanager()
-man.create_db()
 
-man.purge()
-man.insert_examples()
+if __name__ == "__main__":
+    man = dbmanager()
+    man.create_db()
 
-man.close()
+    man.purge()
+    man.insert_examples()
+
+    man.close()
