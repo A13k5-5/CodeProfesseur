@@ -1,5 +1,5 @@
 # teacher_route.py
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from database import dbmanager
 import sqlite3
 
@@ -11,9 +11,8 @@ def get_teacher_classrooms(teacher_id):
     
     try:
         #check if the teacher exists?
-
         # Get all classrooms for the teacher
-        classrooms = db.conn.execute('''SELECT * FROM classroom WHERE teacher = ?''', (teacher_id,)).fetchall()
+        classrooms = db.get_teacher_classrooms(teacher_id)
         result = []
         for classroom in classrooms:
             result.append({
