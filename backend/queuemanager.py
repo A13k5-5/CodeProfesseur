@@ -42,6 +42,8 @@ def worker_thread():
         except Exception as e:
             print(f"Error in worker thread: {str(e)}")
 
+    print("Submission worker thread stopped")
+
 def start_worker():
     global should_continue
     should_continue = True
@@ -52,7 +54,6 @@ def start_worker():
 def stop_worker():
     global should_continue
     should_continue = False
-    print("Submission worker thread stopped")
 
 def add_submission(path, user_id, question_id):
     submission_queue.put({
