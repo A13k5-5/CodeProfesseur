@@ -1,5 +1,5 @@
 #might need to add an integer id to the user table, otherwise the teacher's email will be in the url
-from werkzeug.security import generate_password_hash
+from passlib.hash import bcrypt
 import sqlite3
 
 class dbmanager:
@@ -216,12 +216,9 @@ class dbmanager:
         self.conn.commit()
 
     def insert_examples(self):
-        # Hash the passwords properly
-        teacher_pwd_hash = generate_password_hash("password123", method='pbkdf2:sha256')
-        student_pwd_hash = generate_password_hash("verysecurepassword", method='pbkdf2:sha256')
     
-        self.add_user("martin.benning@ucl.ac.uk", "Martin", "Benning", 1, teacher_pwd_hash)
-        self.add_user("alex.pison.24@ucl.ac.uk", "Alex", "Pison", 0, student_pwd_hash)
+        self.add_user("martin.benning@ucl.ac.uk", "Martin", "Benning", 1, "password123")
+        self.add_user("alex.pison.24@ucl.ac.uk", "Alex", "Pison", 0, "verysecurepassword")
         # Make sure the database is purged before, otherwise might throw error
         self.add_classroom("martin.benning@ucl.ac.uk", "Design and Professional Skills")
         self.add_user_to_classroom("alex.pison.24@ucl.ac.uk", 1) # This is a bit dangerous

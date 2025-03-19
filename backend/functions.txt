@@ -34,36 +34,13 @@ get all their questions, submissions percentage success
 
 
 
-HASHLIB
-hashlib.sha256(password.encode()).hexdigest()
-This line performs a SHA-256 hash on a password and returns a hexadecimal string representation.
+PASSLIB.HASH - BCRYPT
+https://martinheinz.dev/blog/59
+slow hash functions are used for password hashing making it much more inefficient for attacker to brute-force a password. 
+We then modify the hasher to use higher number of rounds (cost factor) making the hashing faster and therefore, hashes less secure. 
+This number should be the largest possible that doesn't cause intolerable delay for your users (~300ms).
+ passlib updates default rounds value periodically, so your don't necessarily need to change this value
 
-password.encode():
-password is assumed to be a Python string
-.encode() converts this string to bytes using UTF-8 encoding (by default)
-This conversion is necessary because cryptographic hash functions operate on bytes, not strings
-Example: "hello" becomes b"hello"
-
-
-hashlib.sha256(...):
-hashlib is Python's standard library for cryptographic hashing
-sha256() creates a hash object that implements the SHA-256 algorithm
-The function takes the bytes from password.encode() as input
-SHA-256 produces a 256-bit (32-byte) hash value
-This is a one-way function - you cannot derive the original password from the hash
-
-
-.hexdigest():
-This method returns the hash value as a hexadecimal string
-Each byte is represented as two hex digits
-The resulting string is always 64 characters long (32 bytes × 2 characters per byte)
-
-
-HMAC - a mechanism for message authentication using cryptographic hash functions
- hmac.compare_digest(a, b)¶
-    Return a == b. 
-This function uses an approach designed to prevent timing analysis by avoiding content-based 
-short circuiting behaviour, making it appropriate for cryptography. a and b must both be of the same type
 
 timing attack:
 By analyzing these response times, an attacker can indirectly gather information leaked by the application. 
