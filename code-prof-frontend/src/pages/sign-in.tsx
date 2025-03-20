@@ -11,12 +11,12 @@ export default function SignIn() {
     }
     const { setUser } = userCtx;
     const [localEmail, setLocalEmail] = useState("");
-    const [localId, setLocalId] = useState("");
+    const [localPwd, setLocalPwd] = useState("");
     const router = useRouter();
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setUser({ email: localEmail, id: localId });
+        setUser({ email: localEmail, pwd: localPwd});
         router.push("/student-home");
     };
 
@@ -36,12 +36,12 @@ export default function SignIn() {
                     />
                 </label>
                 <label htmlFor="ID" className="flex flex-col">
-                    ID:
+                    Password:
                     <input
                         type="text"
                         id="ID"
-                        value={localId}
-                        onChange={(e)=>setLocalId(e.target.value)}
+                        value={localPwd}
+                        onChange={(e)=>setLocalPwd(e.target.value)}
                         className="border border-gray-3"
                         required
                     />

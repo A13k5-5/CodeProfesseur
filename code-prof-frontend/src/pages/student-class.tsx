@@ -9,9 +9,9 @@ function Classrooms() {
     const context = useContext(userContext);
     const user = context ? context.user : undefined;
     const email = user ? user.email : '';
-    const id = user ? user.id : '';
+    const pwd = user ? user.pwd : '';
 
-    const [userData, setUserData] = useState([]);
+    const [classrooms, setClassrooms] = useState([]);
         
     useEffect( () => {
       fetch("http://localhost:8080/api/classrooms", {
@@ -19,13 +19,24 @@ function Classrooms() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, id })
+        body: JSON.stringify({ email, pwd })
       })
         .then(response => response.json())
         .then((data) => {
-          setUserData(data);
+          setClassrooms(data);
         })
     })
+
+    const router = useRouter();
+    const [userClassroom, setUserClassroom] = useState([]);
+    
+    const handleSubmit = (classroom: any) => {
+      setUserClassroom(classroom);
+      router.push({
+        pathname: `/classroom/${userClassroom}`,
+        query: { classroom: JSON.stringify(classroom) }
+      });
+    }
 
   return (
     <div id="main" className="flex flex-col min-h-screen">
@@ -33,9 +44,21 @@ function Classrooms() {
        
       </header>
     <main className="flex flex-row items-center justify-center flex-grow py-2">
-      <p>
-        {userData}
-      </p>
+      <div>
+        {classrooms.map((data, index) => (
+          <div key={index} className="mb-4">
+            {Object.keys(data).map((key, idx) => (
+              <p 
+                key = {idx + 1} 
+                className="cursor-pointer text-blue-500 hover:underline"
+                onClick={() => handleSubmit(data[key])}
+              >
+                <strong>Classroom {idx + 1}: </strong> {data[key]}
+              </p>
+            ))}
+          </div>
+        ))}
+      </div>
     </main>
   </div>
   );

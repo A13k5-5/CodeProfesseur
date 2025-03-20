@@ -9,21 +9,23 @@ function StudentHome() {
     const context = useContext(userContext);
     const user = context ? context.user : undefined;
     const email = user ? user.email : '';
-    const id = user ? user.id : '';
+    const pwd = user ? user.pwd : '';
+    const setUser = context ? context.setUser : undefined;
 
     const [userData, setUserData] = useState([]);
         
-    useEffect( () => {
+    useEffect(() => {
       fetch("http://localhost:8080/api/user", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, id })
+        body: JSON.stringify({ email, pwd })
       })
         .then(response => response.json())
         .then((data) => {
           setUserData(data);
+          console.log(data[0]);
         })
     })
 
@@ -49,9 +51,15 @@ function StudentHome() {
         </div>
       </header>
     <main className="flex flex-row items-center justify-center flex-grow py-2">
-      <p>Details
-        {userData}
-      </p>
+      <p>Details</p>
+        {userData.map((data, index) => (
+          <div key={index} className="mb-4">
+            <p><strong>Length of Data:</strong>{Object.keys(data).length}</p>
+            <p><strong>Classroom:</strong> {data[5]}</p> 
+            <p><strong>Question:</strong> {data[7]}</p> 
+            <p><strong>Submission:</strong> {data[12]}</p>
+          </div>
+        ))}
     </main>
   </div>
   );
