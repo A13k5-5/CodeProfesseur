@@ -1,7 +1,7 @@
 #Need to add JWT token
 from flask import Flask, request, jsonify 
 from flask_cors import CORS
-from werkzeug.security import generate_password_hash, check_password_hash
+from passlib.hash import bcrypt
 from database import dbmanager
 import classroom_route, teacher_route, question_route, submission_route
 import sqlite3
@@ -29,7 +29,8 @@ def register_user():
         db.close()
         return jsonify({"error": "User already exists"}), 409
     
-    password_hash = generate_password_hash(data['password'], method='pbkdf2:sha256')
+    hasher = bcrypt.using(rounds=11)
+    password_hash = hasher.hash(data['password'])
     
     try:
         db.add_user(data['user_id'], data['first_name'], data['last_name'], data['type'], password_hash)
@@ -44,7 +45,8 @@ def register_user():
 def login():
     db = dbmanager()
     data = request.json
-    if not data or 'user_id' not in data or 'pwd_hash' not in data:
+    
+    if not data or 'user_id' not in data or 'password' not in data:
         return jsonify({"error": "Missing required field"}), 400
     
     if not db.user_exists(data['user_id']):
@@ -53,7 +55,9 @@ def login():
     
     user = db.get_user(data['user_id'])
     
-    if check_password_hash(user['pwd_hash'], data['pwd_hash']):
+    hasher = bcrypt.using(rounds=11)
+    
+    if hasher.verify(data['password'], user['pwd_hash']):
         db.close()
         return jsonify({"user_login_successful": True}), 200
     else:
