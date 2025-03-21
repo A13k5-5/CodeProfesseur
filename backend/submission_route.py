@@ -3,6 +3,8 @@ from flask import Blueprint, jsonify, request
 from database import dbmanager
 import sqlite3
 
+import queuemanager as subq
+
 bp = Blueprint('submission' , __name__ , url_prefix='/api/submission')
 
 @bp.route('/add_student_submission', methods=['POST'])
@@ -14,9 +16,11 @@ def add_student_submission():
         return jsonify({"error": "Missing required fields"}), 400
     
     try:
-        db.add_docker_result_to_database(data['path'], data.get('is_accepted', 0), data['user'], data['question'])
-        
-        db.close()
+        # db.add_docker_result_to_database(data['path'], data.get('is_accepted', 0), data['user'], data['question'])
+        # db.close()
+
+        subq.add_submission(data['path'], data['user'], data['question'])
+
         return jsonify({
             "message": "Submission added successfully", 
         }), 201

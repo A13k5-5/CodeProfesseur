@@ -5,6 +5,8 @@ from passlib.hash import bcrypt
 from database import dbmanager
 import classroom_route, teacher_route, question_route, submission_route
 import sqlite3
+import atexit
+import queuemanager as subq
 
 
 app = Flask(__name__)
@@ -15,6 +17,8 @@ app.register_blueprint(classroom_route.bp)
 app.register_blueprint(teacher_route.bp)
 app.register_blueprint(question_route.bp)
 app.register_blueprint(submission_route.bp)
+
+worker_thread = subq.start_worker()
 
 
 @app.route('/api/register_user', methods=['POST'])
@@ -63,6 +67,10 @@ def login():
     else:
         db.close()
         return jsonify({"error": "password does not match"}), 401
+    
+@atexit.register
+def cleanup():
+    subq.stop_worker()
     
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify
 from database import dbmanager
 import sqlite3
+from database import dbmanager
 
 bp = Blueprint('classroom', __name__, url_prefix='/api/classroom')
 
@@ -59,14 +60,16 @@ def get_classroom_students(classroom_id):
     db = dbmanager()
     
     try:
+
+        students = db.get_students_in_class(classroom_id)
         # Get all students in the classroom and sorting by last name
         students = db.get_users_in_classroom(classroom_id)
         result = []
         for student in students:
             result.append({
-                'first_name': student['first_name'],
-                'last_name': student['last_name'],
-                'user_id': student['user_id']
+                'first_name': student[1],
+                'last_name': student[2],
+                'user_id': student[0]
             })
         
         db.close()

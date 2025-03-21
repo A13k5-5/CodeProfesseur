@@ -306,5 +306,7 @@ if __name__ == "__main__":
 
     man.purge()
     man.insert_examples()
+    man.purge()
+    man.insert_examples()
 
     man.close()

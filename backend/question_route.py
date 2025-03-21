@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify, request
 from database import dbmanager
 import sqlite3
+from database import dbmanager
 
 bp = Blueprint('question', __name__, url_prefix='/api/question')
 
