@@ -46,3 +46,10 @@ timing attack:
 By analyzing these response times, an attacker can indirectly gather information leaked by the application. 
 This technique can be used for malicious purposes, such as guessing a user's password or breaking encryption methods. 
 Side-channel attacks exploit unintended information leakage from a system
+
+JWT
+https://jwt.io/introduction 
+https://datatracker.ietf.org/doc/html/rfc7519#section-3
+https://auth0.com/docs/secure/tokens/json-web-tokens 
+https://swharden.com/blog/2021-05-15-python-credentials/
+https://medium.com/jungletronics/how-to-securely-save-credentials-in-python-dd5c6983741a
