@@ -106,7 +106,7 @@ function Submission(){
                 <p>No submissions made.</p>
                 </div>
             )}
-            <Link className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-500 transition duration-300 mt-20" href={`/add-submission/${question}`}>
+            <Link className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-500 transition duration-300 mt-20" href={`/add-submission/${question}/`}>
                 Make a submission
             </Link>
         </main>

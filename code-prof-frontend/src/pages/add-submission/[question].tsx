@@ -12,6 +12,24 @@ function AddSubmission(){
 
     const [code, setCode] = useState("");
 
+    const [questionId, setQuestionId] = useState<number | null>(null);
+    
+        useEffect(() => {
+            fetch(`http://localhost:8080/api/question/${question}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                setQuestionId(data.question_id); 
+            })
+            .catch(error => {
+                console.error("Error fetching question ID:", error);
+            });
+        }, [question]); 
+
     const handleSubmit = () => {
             fetch('http://localhost:8080/api/submission/add_student_submission', {
                 method: 'POST',
@@ -20,7 +38,8 @@ function AddSubmission(){
                 },
                 body: JSON.stringify({
                     user: email,
-                    question_id: question,
+                    question_id: questionId,
+                    question: question,
                     text: code
                 })
             })
@@ -30,7 +49,7 @@ function AddSubmission(){
                 }
             })
             .then(data => {
-
+                router.push(`/student-question/${question}`);
             })
             .catch(error => {
                 console.error("Error in posting submitted code ", error);

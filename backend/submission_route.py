@@ -9,26 +9,34 @@ bp = Blueprint('submission' , __name__ , url_prefix='/api/submission')
 
 @bp.route('/add_student_submission', methods=['POST'])
 def add_student_submission():
+    print("Entered")
+
     db = dbmanager()
 
     data = request.json
-    if not data or 'user' not in data or 'question_id' not in data or 'text' not in data:
+    print("Received data")
+    if not data or 'user' not in data or 'question' not in data or 'text' not in data:
         return jsonify({"error": "Missing required fields"}), 400
-    
-    student_submissions = get_student_submissions(data['question_id'], data['user'])
+    print("Data is correct")
+    student_submissions = get_student_submissions(data['question'], data['user'])
     submission_count = len(student_submissions)
-
-    path = save_student_submission(data['user'], data['question_id'], data['text'], submission_count)
-
+    print("Got student submissions")
+    path = save_student_submission(data['user'], data['question'], data['text'], submission_count)
+    print("Got path")
+    user_id = data['user']
+    question = data['question']
+    question_id = data['question_id']
+    print(f"User Id: {user_id}\n Question Id: {question_id}")
     try:
         db.add_docker_result_to_database(path, 0, data['user'], data['question_id'])
-        
+        print("Added to docker")
         db.close()
         return jsonify({
             "message": "Submission added successfully", 
         }), 201
     except sqlite3.Error as e:
         db.close()
+        print("Error somewhere", e)
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
 def save_student_submission(student_id, question, submission, sub_num):
