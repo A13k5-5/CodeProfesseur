@@ -33,6 +33,19 @@ def create_question():
         db.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
+@bp.route('/<string:question_name>', methods=['GET'])
+def get_question_id(question_name):
+    db = dbmanager()
+    try:
+        
+        question = db.get_question_id(question_name)
+        db.close()
+        return jsonify({
+                'question_id': question['question_id']
+            })
+    except sqlite3.Error as e:
+        db.close()
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
 
 @bp.route('/<int:question_id>', methods=['GET'])
 def get_question(question_id):
@@ -54,6 +67,34 @@ def get_question(question_id):
                 'difficulty': question['difficulty'],
                 'due_date': question['due_date']
             })
+    except sqlite3.Error as e:
+        db.close()
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+@bp.route('/<int:question_id>/<string:student_id>', methods=['GET'])
+def get_student_submissions(question_id, student_id):
+    db = dbmanager()
+    try:
+        if not db.question_exists(question_id):
+            db.close()
+            return jsonify({"error": "question does not exist"}), 404
+        print(f"Question Id: {question_id}")
+        print(f"Student Id: {student_id}")
+        submissions = db.get_student_question_submissions(student_id, question_id)
+
+        db.close()
+        if submissions:
+            print(submissions)
+        if not submissions:
+            return jsonify({"status": "No submissions yet"})
+        
+        result = []
+        for submission in submissions:
+            result.append({
+                'submission_path': submission['path'],
+                'is_accepted': submission['is_accepted'],
+                'date': submission['date']
+            })
+        return jsonify(result)
     except sqlite3.Error as e:
         db.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500

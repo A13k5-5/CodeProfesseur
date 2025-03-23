@@ -17,7 +17,6 @@ function SelectedClassroom() {
     
     const user = usercontext ? usercontext.user : undefined;
     const email = user ? user.email : "";
-    const pwd = user ? user.pwd : "";
 
     const { classroom } = router.query;
     const classroomData = classroom ? JSON.parse(classroom as string) : null;
@@ -79,10 +78,9 @@ function SelectedClassroom() {
     const [selectedQuestion, setSelectedQuestion] = useState([]);
 
     const handleSubmit = (question : any) => {
-      setSelectedQuestion(question);
-      console.log("question ", selectedQuestion);
+      console.log("question ", question);
       router.push({
-        pathname: `/user_question/${selectedQuestion}`,
+        pathname: `/student-question/${question}`,
         query: { question: JSON.stringify(question)}
       });
     }
@@ -105,8 +103,8 @@ function SelectedClassroom() {
                         </thead>
                         <tbody>
                             {questions.map((question, index) => (
-                                <tr key={index} className={index % 2 === 0 ? "bg-black" : "bg-gray-100"}>
-                                    <td className="border border-gray-400 px-4 py-2 text-center" onClick={() => { handleSubmit(question.name)}}>{question.name}</td>
+                                <tr key={index} className={index % 2 === 0 ? "bg-black" : "bg-gray"}>
+                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(question.name)}}>{question.name}</td>
                                     <td className="border border-gray-400 px-4 py-2 text-center">{question.submission_count ?? "N/A"}</td>
                                     <td className="border border-gray-400 px-4 py-2 text-center">{question.due_date ?? "N/A"}</td>
                                     <td className="border border-gray-400 px-4 py-2 text-center">{question.success_rate ?? "N/A"}</td>

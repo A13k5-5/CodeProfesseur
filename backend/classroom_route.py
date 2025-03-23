@@ -27,7 +27,6 @@ def get_classroom_questions(classroom_id):
         db.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
-
 @bp.route('/<int:classroom_id>/questions/<string:student_id>', methods=['GET'])
 def get_student_classroom_questions(classroom_id, student_id):
 

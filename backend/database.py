@@ -17,6 +17,8 @@ class dbmanager:
     def disable_row_factory(self):
         self.conn.row_factory = None
         self.cursor = self.conn.cursor()
+        self.conn.execute('PRAGMA foreign_keys = ON;')
+        self.conn.commit()
 
     def create_db(self):
         self.cursor.execute('''
@@ -111,6 +113,10 @@ class dbmanager:
         question = self.cursor.execute('''SELECT * FROM question q WHERE q.question_id = ?''', (question_id,)).fetchone()
         return question
     
+    def get_question_id(self, question_name):
+        question = self.cursor.execute('''SELECT q.question_id FROM question q WHERE q.name = ?''', (question_name,)).fetchone()
+        return question
+    
     def question_exists(self, question_id):
         exists = self.cursor.execute('''SELECT q.question_id FROM question q WHERE q.question_id = ?''', (question_id,)).fetchone()
         if exists is None:
@@ -132,6 +138,19 @@ class dbmanager:
             WHERE s.question = ?
             ORDER BY u.last_name, u.first_name, s.date ASC
         ''', (question_id,)).fetchall()
+    
+    def get_student_question_submissions(self, user_id, question_id):
+        
+        print(f"User Id in db: {user_id}")
+        submissions = self.cursor.execute('''
+            SELECT s.path, s.is_accepted, s.date
+            FROM submission s
+            JOIN user u on s.user = u.user_id
+            JOIN question q on s.question = q.question_id
+            WHERE s.user = ? AND s.question = ?
+            ORDER BY s.date DESC 
+        ''', (user_id, question_id,)).fetchall()
+        return submissions
 
     #Used to get all questions created by the teacher
     def get_teacher_question_id_and_names(self, teacher_id):
@@ -150,7 +169,7 @@ class dbmanager:
         submissions = self.cursor.execute('''
                     SELECT COUNT(*) as total_submissions, SUM(is_accepted) as successful_submissions
                     FROM submission
-                    WHERE question = ?
+                    WHERE question = ? 
                 ''', (question['question_id'],)).fetchone()
                 
         total_submissions = submissions['total_submissions']
@@ -199,6 +218,7 @@ class dbmanager:
             return False
         else:
             return True
+        
         
     # Ammar's Functions
 
@@ -278,7 +298,7 @@ class dbmanager:
     def add_docker_result_to_database(self,path, is_accepted, user, question):
         self.cursor.execute(f'''
         INSERT INTO submission(path, is_accepted, user, question, date) 
-        VALUE ("{path}", "{is_accepted}", "{user}", "{question}", datetime('now'))
+        VALUES ("{path}", "{is_accepted}", "{user}", "{question}", datetime('now'))
         ''')
         self.conn.commit()
         
@@ -302,6 +322,8 @@ class dbmanager:
         self.add_user_to_classroom("alex.pison.24@ucl.ac.uk", 2)
         self.add_question("Trivia", "What happened during the last Talk Tuah Podcast episode?", "jsontext", "jsontext", "hard", "2025-02-02")
         self.assign_question(1, 1) # This is a bit dangerous
+        self.add_docker_result_to_database("test path", 1, "alex.pison.24@ucl.ac.uk", 1)
+        self.add_docker_result_to_database("second test path", 0, "alex.pison.24@ucl.ac.uk", 1)
 
 
     def close(self):
