@@ -1,6 +1,5 @@
-# FILE: /docker-test-runner/docker-test-runner/src/test_wrapper.py
 # This file can never be run on its own, as it is running test.py implicitly by importing it.
-# Therefore this file can be executed either by Piston API or in an isolated docker container
+# Therefore this file should be run using the Docker environment built in runBash.py
 
 import importlib
 import sys
