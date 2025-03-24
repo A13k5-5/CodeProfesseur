@@ -12,7 +12,7 @@ should_continue = True
 
 
 # Function to process a single submission
-def process_submission(path, user_id, question_id):
+def process_submission(submission_path, user_id, question_id):
     try:
         db = dbmanager("professeur.db")
         question = db.get_question(question_id)
@@ -21,7 +21,7 @@ def process_submission(path, user_id, question_id):
         output_json = question["output"]
 
         # Execute the bash script and get the result
-        result = exec_bash(input_json, output_json, "./CodeTesting/src/sample.json")
+        result = exec_bash(input_json, output_json, submission_path, "returnTwo")
 
         # Log the result to a file
         f = open("log.txt", "a")
@@ -33,7 +33,7 @@ def process_submission(path, user_id, question_id):
         ret = 1 if result == "All tests passed!" else 0
 
         dbm = dbmanager("professeur.db")
-        dbm.add_docker_result_to_database(path, ret, user_id, question_id)
+        dbm.add_docker_result_to_database(submission_path, ret, user_id, question_id)
         dbm.close()
 
     except Exception as e:
@@ -49,7 +49,9 @@ def worker_thread():
         try:
             # Get a submission from the queue with a timeout
             submission = submission_queue.get(timeout=1)
-            process_submission(submission["path"], submission["user_id"], submission["question_id"])
+            process_submission(
+                submission["path"], submission["user_id"], submission["question_id"]
+            )
 
             # Mark the task as done
             submission_queue.task_done()
@@ -81,11 +83,13 @@ def stop_worker():
 
 
 # Function to add a submission to the queue
-def add_submission(path, user_id, question_id):
-    submission_queue.put({"path": path, "user_id": user_id, "question_id": question_id})
+def add_submission(submission_path, user_id, question_id):
+    submission_queue.put(
+        {"path": submission_path, "user_id": user_id, "question_id": question_id}
+    )
 
 
 if __name__ == "__main__":
     worker = start_worker()
-    add_submission("alex.pison.24@ucl.ac.uk", "1")
+    add_submission("./CodeTesting/src/forSampleJson.py", "alex.pison.24@ucl.ac.uk", "1")
     stop_worker()

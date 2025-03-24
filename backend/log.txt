@@ -15,3 +15,44 @@ ZeroDivisionError: division by zero
 Incorrect for input: [3], received: [3, 3], expected: [3, 1]
 Incorrect for input: [3], received: [3, 3], expected: [3, 1]
 Incorrect for input: [3], received: [3, 3], expected: [3, 1]
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See 'docker run --help'.
+ERROR: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+docker: Error response from daemon: pull access denied for test-runner, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
+ERROR: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+docker: Error response from daemon: pull access denied for test-runner, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
+bash: run_tests.sh: No such file or directory
+bash: run_tests.sh: No such file or directory
+ERROR: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+docker: Error response from daemon: pull access denied for test-runner, repository does not exist or may require 'docker login': denied: requested access to the resource is denied.
+See 'docker run --help'.
