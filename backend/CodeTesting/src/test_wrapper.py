@@ -17,10 +17,6 @@ def code_tester(module_name: str, func_name: str, qid: int):
         print("Module or function not found")
 
     def test():
-        # db = dbmanager("../../professeur.db")
-        # test_cases = db.get_question(qid)["input"]
-        # expected_outputs = db.get_question(qid)["output"]
-        # print(test_cases, expected_outputs)
         with open("sample.json") as jsonData:
             data = json.load(jsonData)
             test_cases = data["input"]
