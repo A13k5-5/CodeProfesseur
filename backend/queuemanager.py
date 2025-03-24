@@ -11,7 +11,7 @@ submission_queue = queue.Queue()
 should_continue = True
 
 # Function to process a single submission
-def process_submission(path, user_id, question_id):
+def process_submission(user_id, question_id):
     try:
         db = dbmanager('professeur.db')
 
@@ -84,3 +84,8 @@ def add_submission(path, user_id, question_id):
         'user_id': user_id,
         'question_id': question_id
     })
+
+if __name__ == '__main__':
+    worker = start_worker()
+    add_submission("alex.pison.24@ucl.ac.uk", "1")
+    stop_worker()
