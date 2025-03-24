@@ -260,8 +260,8 @@ class dbmanager:
     def add_docker_result_to_database(self, path, is_accepted, user, question):
         self.cursor.execute(
             f"""
-        INSERT INTO submission(path, is_accepted, user, question, date) 
-        VALUE ("{path}", "{is_accepted}", "{user}", "{question}")
+        INSERT INTO submission(path, is_accepted, user, question) 
+        VALUES ("{path}", "{is_accepted}", "{user}", "{question}")
         """
         )
         self.conn.commit()

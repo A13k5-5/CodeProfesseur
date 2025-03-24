@@ -1,6 +1,6 @@
 import subprocess
 
-def exec_bash(path: str):
+def exec_bash(path: str, a, b ,c):
     try:
         result = subprocess.run(['bash', path], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         output = result.stdout
