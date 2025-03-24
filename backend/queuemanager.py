@@ -12,7 +12,7 @@ should_continue = True
 
 
 # Function to process a single submission
-def process_submission(user_id, question_id):
+def process_submission(path, user_id, question_id):
     try:
         db = dbmanager("professeur.db")
         question = db.get_question(question_id)
@@ -21,17 +21,20 @@ def process_submission(user_id, question_id):
         output_json = question["output"]
 
         # Execute the bash script and get the result
-        result = exec_bash(input_json, output_json, "./CodeTesting/src/sample.json")
+        result = exec_bash(path, input_json, output_json, "./CodeTesting/src/sample.json")
 
-        # #Add the result to the database
-        # dbm = dbmanager("professeur.db")
-        # dbm.add_docker_result_to_database(path, 1, user_id, question_id)
-        # dbm.close()
-
-        # # Log the result to a file
+        # Log the result to a file
         f = open("log.txt", "a")
         f.write(result)
         f.close()
+
+        # #Add the result to the database
+
+        ret = 1 if result == "All tests passed!" else 0
+
+        dbm = dbmanager("professeur.db")
+        dbm.add_docker_result_to_database(path, ret, user_id, question_id)
+        dbm.close()
 
     except Exception as e:
         # Handle any exceptions silently
