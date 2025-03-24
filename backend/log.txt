@@ -1,0 +1,14 @@
+All tests passed!
+Traceback (most recent call last):
+  File "/app/test_wrapper.py", line 44, in <module>
+    code_tester()
+  File "/app/test_wrapper.py", line 40, in code_tester
+    test()
+  File "/app/test_wrapper.py", line 32, in test
+    output = target_function(*test)
+             ^^^^^^^^^^^^^^^
+NameError: cannot access free variable 'target_function' where it is not associated with a value in enclosing scope
+Incorrect for input: [1], received: [1, 2], expected: [1, 1]
+Incorrect for input: [1], received: [1, 2], expected: [1, 1]
+Incorrect for input: [1], received: [1, 2], expected: [1, 1]
+Incorrect for input: [1], received: [1, 2], expected: [1, 1]
