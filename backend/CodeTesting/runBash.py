@@ -1,7 +1,9 @@
 import subprocess
 
 
-def exec_bash():
+def exec_bash(input_json, output_json):
+    with open("./sample.json", "w") as file:
+        file.write(input_json)
     try:
         result = subprocess.run(
             ["bash", "./run_tests.sh"],
@@ -18,5 +20,5 @@ def exec_bash():
 
 if __name__ == "__main__":
     path = "./run_tests.sh"
-    output = exec_bash()
-    print(output)
+    # output = exec_bash()
+    # print(output)

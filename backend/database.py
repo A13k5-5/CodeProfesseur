@@ -277,6 +277,16 @@ class dbmanager:
         self.conn.commit()
 
     def insert_examples(self):
+        import json
+
+        # Define the test cases as Python objects
+        test_input = [[1], [2], [3], [4], [5], [6], [7]]
+        test_output = [[1, 1], [2, 2], [3, 1], [4, 4], [5, 5], [6, 6], [7, 7]]
+
+        # Convert to JSON strings
+        input_json = json.dumps(test_input)
+        output_json = json.dumps(test_output)
+
         # Make sure the database is purged before, otherwise might throw error
         self.add_user("martin.benning@ucl.ac.uk", "Martin", "Benning", 1, "password123")
         self.add_user(
@@ -289,13 +299,8 @@ class dbmanager:
         self.add_question(
             "Trivia",
             "What happened during the last Talk Tuah Podcast episode?",
-            """
-                {
-                    'input': [[1],[2],[3],[4],[5],[6],[7]],
-                    'output': [[1,1],[2,2],[3,1],[4,4],[5,5],[6,6],[7,7]]
-                }
-            """,
-            "jsonout",
+            input_json,
+            output_json,
             "hard",
             "2025-02-02",
         )
