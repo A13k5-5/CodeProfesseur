@@ -1,3 +1,5 @@
+cd CodeTesting
+
 # Build the Docker image
 docker build -q -t test-runner .
 
