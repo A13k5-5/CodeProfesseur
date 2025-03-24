@@ -9,7 +9,7 @@ bp = Blueprint('submission' , __name__ , url_prefix='/api/submission')
 
 @bp.route('/add_student_submission', methods=['POST'])
 def add_student_submission():
-    db = dbmanager()
+    db = dbmanager('professeur.db')
 
     data = request.json
     if not data or 'path' not in data or 'user' not in data or 'question' not in data:
@@ -33,7 +33,7 @@ def add_student_submission():
 #Then the individual attempts are in chronological order
 @bp.route('/results/<int:question_id>', methods=['GET'])
 def get_student_results(question_id):
-    db = dbmanager()
+    db = dbmanager('professeur.db')
     
     try:
         # Get all submissions for this question
