@@ -10,18 +10,19 @@ submission_queue = queue.Queue()
 # Flag to control the worker thread's execution
 should_continue = True
 
+
 # Function to process a single submission
 def process_submission(path, user_id, question_id):
     try:
-        db = dbmanager('professeur.db')
+        db = dbmanager("professeur.db")
 
-        json = db.get_question(question_id)['input']
+        json = db.get_question(question_id)["input"]
 
-        with open('CodeTesting/src/sample.json', 'w') as file:
+        with open("CodeTesting/src/sample.json", "w") as file:
             file.write(json)
 
         # Execute the bash script and get the result
-        result = exec_bash(path)
+        result = exec_bash()
 
         # #Add the result to the database
         # dbm = dbmanager("professeur.db")
@@ -37,6 +38,7 @@ def process_submission(path, user_id, question_id):
         # Handle any exceptions silently
         print(e)
 
+
 # Worker thread function to process submissions from the queue
 def worker_thread():
     print("Submission worker thread started")
@@ -46,14 +48,12 @@ def worker_thread():
             # Get a submission from the queue with a timeout
             submission = submission_queue.get(timeout=1)
             process_submission(
-                submission['path'],
-                submission['user_id'],
-                submission['question_id']
+                submission["path"], submission["user_id"], submission["question_id"]
             )
 
             # Mark the task as done
             submission_queue.task_done()
-        
+
         except queue.Empty:
             # Continue if the queue is empty (timeout handled above)
             continue
@@ -62,6 +62,7 @@ def worker_thread():
             print(f"Error in worker thread: {str(e)}")
 
     print("Submission worker thread stopped")
+
 
 # Function to start the worker thread
 def start_worker():
@@ -72,15 +73,13 @@ def start_worker():
     thread.start()
     return thread
 
+
 # Function to stop the worker thread
 def stop_worker():
     global should_continue
     should_continue = False
 
+
 # Function to add a submission to the queue
 def add_submission(path, user_id, question_id):
-    submission_queue.put({
-        'path': path,
-        'user_id': user_id,
-        'question_id': question_id
-    })
+    submission_queue.put({"path": path, "user_id": user_id, "question_id": question_id})

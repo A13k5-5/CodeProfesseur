@@ -289,7 +289,12 @@ class dbmanager:
         self.add_question(
             "Trivia",
             "What happened during the last Talk Tuah Podcast episode?",
-            "jsonin",
+            """
+                {
+                    'input': [[1],[2],[3],[4],[5],[6],[7]],
+                    'output': [[1,1],[2,2],[3,1],[4,4],[5,5],[6,6],[7,7]]
+                }
+            """,
             "jsonout",
             "hard",
             "2025-02-02",
@@ -301,7 +306,7 @@ class dbmanager:
 
 
 if __name__ == "__main__":
-    man = dbmanager()
+    man = dbmanager("professeur.db")
     man.create_db()
 
     man.purge()
