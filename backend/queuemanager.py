@@ -15,13 +15,14 @@ def process_submission(user_id, question_id):
     try:
         db = dbmanager('professeur.db')
 
-        json = db.get_question(question_id)['input']
+        question = db.get_question(question_id)
 
-        with open('CodeTesting/src/sample.json', 'w') as file:
-            file.write(json)
+        input_json = question['input']
+        output_json = question['output']
+
 
         # Execute the bash script and get the result
-        result = exec_bash()
+        result = exec_bash(input_json, output_json)
 
         # #Add the result to the database
         # dbm = dbmanager("professeur.db")
