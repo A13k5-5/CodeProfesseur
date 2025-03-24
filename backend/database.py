@@ -261,7 +261,7 @@ class dbmanager:
         self.cursor.execute(
             f"""
         INSERT INTO submission(path, is_accepted, user, question, date) 
-        VALUE ("{path}", "{is_accepted}", "{user}", "{question}", datetime('now'))
+        VALUE ("{path}", "{is_accepted}", "{user}", "{question}")
         """
         )
         self.conn.commit()

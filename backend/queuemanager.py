@@ -2,7 +2,7 @@ import threading
 import queue
 
 from database import dbmanager
-import runBash # TODO: match the directories with alex code execution and backend / database
+from CodeTesting.runBash import exec_bash
 
 # Queue to hold submissions for processing
 submission_queue = queue.Queue()
@@ -14,11 +14,11 @@ should_continue = True
 def process_submission(path, user_id, question_id):
     try:
         # Execute the bash script and get the result
-        result = runBash.exec_bash(path)
+        result = exec_bash(path)
 
-        # Add the result to the database
-        dbm = dbmanager()
-        dbm.add_docker_result_to_database()
+        #Add the result to the database
+        dbm = dbmanager("professeur.db")
+        dbm.add_docker_result_to_database(path, 1, user_id, question_id)
         dbm.close()
 
         # Log the result to a file
@@ -28,7 +28,7 @@ def process_submission(path, user_id, question_id):
 
     except Exception as e:
         # Handle any exceptions silently
-        pass
+        print(e)
 
 # Worker thread function to process submissions from the queue
 def worker_thread():
