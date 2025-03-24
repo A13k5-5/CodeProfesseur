@@ -12,7 +12,7 @@ should_continue = True
 
 
 # Function to process a single submission
-def process_submission(path, user_id, question_id):
+def process_submission(user_id, question_id):
     try:
         db = dbmanager("professeur.db")
 
@@ -22,6 +22,7 @@ def process_submission(path, user_id, question_id):
             file.write(json)
 
         # Execute the bash script and get the result
+        result = exec_bash()
         result = exec_bash()
 
         # #Add the result to the database
@@ -83,3 +84,11 @@ def stop_worker():
 # Function to add a submission to the queue
 def add_submission(path, user_id, question_id):
     submission_queue.put({"path": path, "user_id": user_id, "question_id": question_id})
+
+    submission_queue.put({"path": path, "user_id": user_id, "question_id": question_id})
+
+
+if __name__ == "__main__":
+    worker = start_worker()
+    add_submission("alex.pison.24@ucl.ac.uk", "1")
+    stop_worker()
