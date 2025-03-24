@@ -3,3 +3,5 @@ bash: ./run_tests.sh: No such file or directory
 bash: ./run_tests.sh: No such file or directory
 bash: ./run_tests.sh: No such file or directory
 bash: run_tests.sh: No such file or directory
+bash: run_tests.sh: No such file or directory
+Incorrect for input: [3], received: [3, 3], expected: [3, 1]

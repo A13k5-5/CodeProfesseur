@@ -12,7 +12,7 @@ def exec_bash(input_json, output_json, jsonPath):
         json.dump(combined_data, file)
     try:
         result = subprocess.run(
-            ["bash", "run_tests.sh"],
+            ["bash", "./CodeTesting/run_tests.sh"],
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
