@@ -15,15 +15,10 @@ should_continue = True
 def process_submission(user_id, question_id):
     try:
         db = dbmanager("professeur.db")
-
-        json = db.get_question(question_id)["input"]
         question = db.get_question(question_id)
 
         input_json = question["input"]
         output_json = question["output"]
-
-        with open("CodeTesting/src/sample.json", "w") as file:
-            file.write(json)
 
         # Execute the bash script and get the result
         result = exec_bash(input_json, output_json)
