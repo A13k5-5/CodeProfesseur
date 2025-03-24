@@ -21,7 +21,7 @@ def process_submission(path, user_id, question_id):
         output_json = question["output"]
 
         # Execute the bash script and get the result
-        result = exec_bash(path, input_json, output_json, "./CodeTesting/src/sample.json")
+        result = exec_bash(input_json, output_json, "./CodeTesting/src/sample.json")
 
         # Log the result to a file
         f = open("log.txt", "a")
@@ -49,7 +49,7 @@ def worker_thread():
         try:
             # Get a submission from the queue with a timeout
             submission = submission_queue.get(timeout=1)
-            process_submission(submission["user_id"], submission["question_id"])
+            process_submission(submission["path"], submission["user_id"], submission["question_id"])
 
             # Mark the task as done
             submission_queue.task_done()
@@ -81,8 +81,8 @@ def stop_worker():
 
 
 # Function to add a submission to the queue
-def add_submission(user_id, question_id):
-    submission_queue.put({"user_id": user_id, "question_id": question_id})
+def add_submission(path, user_id, question_id):
+    submission_queue.put({"path": path, "user_id": user_id, "question_id": question_id})
 
 
 if __name__ == "__main__":
