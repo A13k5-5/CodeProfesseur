@@ -21,7 +21,7 @@ def process_submission(path, user_id, question_id):
             file.write(json)
 
         # Execute the bash script and get the result
-        result = exec_bash(path)
+        result = exec_bash()
 
         # #Add the result to the database
         # dbm = dbmanager("professeur.db")

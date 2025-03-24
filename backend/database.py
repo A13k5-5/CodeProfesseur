@@ -301,7 +301,7 @@ class dbmanager:
 
 
 if __name__ == "__main__":
-    man = dbmanager()
+    man = dbmanager('professeur.db')
     man.create_db()
 
     man.purge()
