@@ -2,13 +2,13 @@ import subprocess
 import json
 
 
-def exec_bash(input_json, output_json, path):
+def exec_bash(input_json, output_json, jsonPath):
     input_data = json.loads(input_json)
     output_data = json.loads(output_json)
 
     combined_data = {"input": input_data, "output": output_data}
 
-    with open(path, "w") as file:
+    with open(jsonPath, "w") as file:
         json.dump(combined_data, file)
     try:
         result = subprocess.run(
@@ -25,6 +25,8 @@ def exec_bash(input_json, output_json, path):
 
 
 if __name__ == "__main__":
+    input = "[[1], [2], [3], [4], [5], [6], [7]]"
+    output = "[[1, 1], [2, 2], [3, 1], [4, 4], [5, 5], [6, 6], [7, 7]]"
     path = "./run_tests.sh"
-    # output = exec_bash()
-    # print(output)
+    output = exec_bash(input, output, "./src/sample.json")
+    print(output)
