@@ -21,7 +21,7 @@ def process_submission(user_id, question_id):
         output_json = question["output"]
 
         # Execute the bash script and get the result
-        result = exec_bash(input_json, output_json)
+        result = exec_bash(input_json, output_json, "./CodeTesting/src/sample.json")
 
         # #Add the result to the database
         # dbm = dbmanager("professeur.db")

@@ -8,7 +8,7 @@ bp = Blueprint('classroom', __name__, url_prefix='/api/classroom')
 
 @bp.route('/<int:classroom_id>/questions', methods=['GET'])
 def get_classroom_questions(classroom_id):
-    db = dbmanager()
+    db = dbmanager('professeur.db')
 
     try:
         result = []
@@ -30,7 +30,7 @@ def get_classroom_questions(classroom_id):
 
 @bp.route('/<int:classroom_id>/questions/<string:student_id>', methods=['GET'])
 def get_student_classroom_questions(classroom_id, student_id):
-    db = dbmanager()
+    db = dbmanager('professeur.db')
 
     try:
         result = []
@@ -57,7 +57,7 @@ def get_student_classroom_questions(classroom_id, student_id):
 
 @bp.route('/<int:classroom_id>/students', methods=['GET'])
 def get_classroom_students(classroom_id):
-    db = dbmanager()
+    db = dbmanager('professeur.db')
     
     try:
 
