@@ -261,7 +261,7 @@ class dbmanager:
         self.cursor.execute(
             f"""
         INSERT INTO submission(path, is_accepted, user, question, date) 
-        VALUE ("{path}", "{is_accepted}", "{user}", "{question}", datetime('now'))
+        VALUE ("{path}", "{is_accepted}", "{user}", "{question}")
         """
         )
         self.conn.commit()
@@ -304,6 +304,8 @@ if __name__ == "__main__":
     man = dbmanager()
     man.create_db()
 
+    man.purge()
+    man.insert_examples()
     man.purge()
     man.insert_examples()
 
