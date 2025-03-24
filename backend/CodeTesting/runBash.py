@@ -2,11 +2,15 @@ import subprocess
 import json
 
 
-def exec_bash(input_json, output_json, jsonPath):
+def exec_bash(input_json, output_json, jsonPath, submissionPath):
     input_data = json.loads(input_json)
     output_data = json.loads(output_json)
 
-    combined_data = {"input": input_data, "output": output_data}
+    combined_data = {
+        "input": input_data,
+        "output": output_data,
+        "submissionPath": submissionPath,
+    }
 
     with open(jsonPath, "w") as file:
         json.dump(combined_data, file)

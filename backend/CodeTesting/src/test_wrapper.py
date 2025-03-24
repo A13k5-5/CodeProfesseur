@@ -5,8 +5,12 @@ import importlib
 import sys
 import json
 
-sys.path.append("../..")  # Add parent directory to path
-# from database import dbmanager
+
+def get_json_data():
+    with open("sample.json") as jsonData:
+        data = json.load(jsonData)
+        test_cases = data["input"]
+        expected_outputs = data["output"]
 
 
 def code_tester(module_name: str, func_name: str, qid: int):

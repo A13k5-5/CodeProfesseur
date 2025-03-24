@@ -281,7 +281,7 @@ class dbmanager:
 
         # Define the test cases as Python objects
         test_input = [[1], [2], [3], [4], [5], [6], [7]]
-        test_output = [[1, 1], [2, 2], [3, 1], [4, 4], [5, 5], [6, 6], [7, 7]]
+        test_output = [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7]]
 
         # Convert to JSON strings
         input_json = json.dumps(test_input)
