@@ -1,1 +1,0 @@
-print("Testing rerouting and adding to database")

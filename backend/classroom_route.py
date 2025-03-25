@@ -16,9 +16,12 @@ def get_classroom_questions(classroom_id):
         questions = db.get_classroom_questions(classroom_id)
 
         for question in questions:
+            submission_count = db.get_total_submissions_for_question(question['question_id'])
             result.append({
                 'name': question['name'],
-                'success_rate': db.calculate_failure_rate(question)
+                'due_date': question['due_date'],
+                'success_rate': db.calculate_failure_rate(question),
+                'submission_count': submission_count
             })
 
         db.close()

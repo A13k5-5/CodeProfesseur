@@ -48,7 +48,7 @@ def save_student_submission(student_id, question, submission):
 
     timestamp = int(time.time())
     
-    file_path = os.path.join(question_dir, f"answer_{timestamp}.txt")
+    file_path = os.path.join(question_dir, f"answer_{timestamp}.py")
     with open(file_path, "w") as file:
         file.write(submission)
     

@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import { userContext, classContext } from '../context';
 import "../styles/globals.css";
 
-interface Student {
-    first_name: string;
-    last_name?: number;
-    user_id?: number;
+interface Question {
+    name: string;
+    success_rate?: number;
+    submission_count?: number;
+    due_date?: string;
 }
 
 function SelectedClassroom() {
@@ -18,13 +19,7 @@ function SelectedClassroom() {
     const email = user ? user.email : "";
 
     const { classroom } = router.query;
-
-    console.log("Classroom Name is : ", classroom);
-
     const classroomData = classroom ? JSON.parse(classroom as string) : null;
-
-    console.log("Classroom Data is : ", classroomData);
-
     const classroomContext = classcontext ? classcontext.classroom : undefined;
 
     const [classId, setClassId] = useState<number>();
@@ -50,9 +45,9 @@ function SelectedClassroom() {
             });
     }, [classroomData]);
 
-    console.log("Class Id is: ", classId);
+    console.log(classId);
 
-    const [students, setStudents] = useState<Student[]>([]);
+    const [questions, setQuestions] = useState<Question[]>([]);
 
     useEffect(() => {
         if (!classId || !email) {
@@ -65,7 +60,7 @@ function SelectedClassroom() {
             return;
         }
 
-        fetch(`http://localhost:8080/api/classroom/${classId}/students`)
+        fetch(`http://localhost:8080/api/classroom/${classId}/questions`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -73,7 +68,7 @@ function SelectedClassroom() {
                 return response.json();
             })
             .then(data => {
-                setStudents(data);
+                setQuestions(data);
             })
             .catch(error => {
                 console.error("Error fetching questions:", error);
@@ -86,7 +81,7 @@ function SelectedClassroom() {
       console.log("question ", question);
       console.log("classroom to send: ", classroom)
       router.push({
-        pathname: `/classroom/${classId}`,
+        pathname: `/student-question/${question}`,
         query: { question: JSON.stringify(question),
                 classroom: JSON.stringify(classroom)
             }
@@ -96,28 +91,32 @@ function SelectedClassroom() {
     return (
         <div id="main" className="flex flex-col min-h-screen">
             <header className="w-full bg-gray-800 text-white py-4">
-                <h1 className="text-center text-xl">Students</h1>
+                <h1 className="text-center text-xl">Classroom Questions</h1>
             </header>
             <main className="flex flex-col items-center justify-center flex-grow py-4">
-                {students.length > 0 ? (
+                {questions.length > 0 ? (
                     <table className="table-auto border-collapse border border-gray-400 w-full max-w-4xl">
                         <thead>
                             <tr className="bg-black-200">
                                 <th className="border border-gray-400 px-4 py-2 text-center">Name</th>
-                                <th className="border border-gray-400 px-4 py-2 text-center">Email</th>
+                                <th className="border border-gray-400 px-4 py-2 text-center">Submission Count</th>
+                                <th className="border border-gray-400 px-4 py-2 text-center">Due Date</th>
+                                <th className="border border-gray-400 px-4 py-2 text-center">Success Rate</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {students.map((student, index) => (
+                            {questions.map((question, index) => (
                                 <tr key={index} className={index % 2 === 0 ? "bg-black" : "bg-gray"}>
-                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(student.user_id)}}>{student.first_name} {student.last_name}</td>
-                                    <td className="border border-gray-400 px-4 py-2 text-center">{student.user_id ?? "N/A"}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(question.name)}}>{question.name}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{question.submission_count ?? "N/A"}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{question.due_date ?? "N/A"}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{question.success_rate ?? "N/A"}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 ) : (
-                    <p>No students in the class.</p>
+                    <p>No submission made.</p>
                 )}
             </main>
         </div>

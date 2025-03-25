@@ -219,6 +219,15 @@ class dbmanager:
         else:
             return True
         
+    def get_total_submissions_for_question(self, question_id):
+        total_submissions = self.cursor.execute('''
+            SELECT COUNT(*) as count
+            FROM submission
+            WHERE question = ?
+        ''', (question_id,)).fetchone()
+        
+        return total_submissions['count'] if total_submissions else 0
+        
         
     # Ammar's Functions
 
