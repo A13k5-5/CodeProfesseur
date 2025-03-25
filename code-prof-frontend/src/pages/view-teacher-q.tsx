@@ -3,14 +3,16 @@ import { useRouter } from "next/router";
 import { userContext, classContext } from '../context';
 import "../styles/globals.css";
 
-interface Question {
+interface Submission {
+    status: string;
     name: string;
-    success_rate?: number;
-    submission_count?: number;
-    due_date?: string;
+    submission_path: string;
+    is_accepted: any;
+    date: string;
+    code: string;
 }
 
-function SelectedClassroom() {
+function ViewAllSubmissions() {
     const router = useRouter();
     const usercontext = useContext(userContext);
     const classcontext = useContext(classContext);
@@ -21,6 +23,9 @@ function SelectedClassroom() {
     const { classroom } = router.query;
     const classroomData = classroom ? JSON.parse(classroom as string) : null;
     const classroomContext = classcontext ? classcontext.classroom : undefined;
+
+    const { question } = router.query;
+    const questionData = classroom ? JSON.parse(question as string) : null;
 
     const [classId, setClassId] = useState<number>();
     const setClassroom = classcontext ? classcontext.setClassroom : undefined;
@@ -47,15 +52,15 @@ function SelectedClassroom() {
 
     console.log(classId);
 
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [submissions, setSubmissions] = useState<Submission[]>([]);
 
     useEffect(() => {
-        if (!classId || !email) {
+        if (!classId || !question) {
             if (!classId) {
                 console.log("ClassId not present");
             }
-            if (!email) {
-                console.log("Email not present");
+            if (!question) {
+                console.log("Question not present");
             }
             return;
         }
@@ -68,12 +73,12 @@ function SelectedClassroom() {
                 return response.json();
             })
             .then(data => {
-                setQuestions(data);
+                setSubmissions(data);
             })
             .catch(error => {
                 console.error("Error fetching questions:", error);
             });
-    }, [classId, email]);
+    }, [classId, question]);
 
     const [selectedQuestion, setSelectedQuestion] = useState([]);
 
@@ -91,10 +96,10 @@ function SelectedClassroom() {
     return (
         <div id="main" className="flex flex-col min-h-screen">
             <header className="w-full bg-gray-800 text-white py-4">
-                <h1 className="text-center text-xl">Classroom Questions</h1>
+                <h1 className="text-center text-xl">Class Submissions</h1>
             </header>
             <main className="flex flex-col items-center justify-center flex-grow py-4">
-                {questions.length > 0 ? (
+                {submissions.length > 0 ? (
                     <table className="table-auto border-collapse border border-gray-400 w-full max-w-4xl">
                         <thead>
                             <tr className="bg-black-200">
@@ -105,12 +110,12 @@ function SelectedClassroom() {
                             </tr>
                         </thead>
                         <tbody>
-                            {questions.map((question, index) => (
+                            {submissions.map((submission, index) => (
                                 <tr key={index} className={index % 2 === 0 ? "bg-black" : "bg-gray"}>
-                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(question.name)}}>{question.name}</td>
-                                    <td className="border border-gray-400 px-4 py-2 text-center">{question.submission_count ?? "N/A"}</td>
-                                    <td className="border border-gray-400 px-4 py-2 text-center">{question.due_date ?? "N/A"}</td>
-                                    <td className="border border-gray-400 px-4 py-2 text-center">{question.success_rate ?? "N/A"}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(submission.name)}}>{submission.name}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{submission.name ?? "N/A"}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{submission.is_accepted ?? "N/A"}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{submission.date ?? "N/A"}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -123,4 +128,4 @@ function SelectedClassroom() {
     );
 }
 
-export default SelectedClassroom;
+export default ViewAllSubmissions;

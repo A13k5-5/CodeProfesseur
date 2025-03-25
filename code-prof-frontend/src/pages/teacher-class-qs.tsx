@@ -81,7 +81,7 @@ function SelectedClassroom() {
       console.log("question ", question);
       console.log("classroom to send: ", classroom)
       router.push({
-        pathname: `/student-question/${question}`,
+        pathname: `/view-teacher-q/${question}`,
         query: { question: JSON.stringify(question),
                 classroom: JSON.stringify(classroom)
             }

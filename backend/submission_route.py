@@ -72,6 +72,7 @@ def get_student_results(question_id):
                 'first_name': submission['first_name'],
                 'last_name': submission['last_name'],
                 'is_accepted': submission['is_accepted'],
+                'date': submission['date']
             })
         
         db.close()
