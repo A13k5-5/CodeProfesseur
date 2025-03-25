@@ -4,4 +4,6 @@ WORKDIR /app
 
 COPY src/ .
 
+COPY uploads/ .
+
 CMD ["python", "test_wrapper.py"]
