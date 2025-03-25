@@ -1,9 +1,9 @@
-myenv
-__pycache__
-.idea
-.DS_Store
-backend/__pycache__
-backend/CodeTesting/__pycache__
-.venv
-code-prof-frontend/node_modules
-code-prof-frontend/.next
+# myenv
+# __pycache__
+# .idea
+# .DS_Store
+# backend/__pycache__
+# backend/CodeTesting/__pycache__
+# .venv
+# code-prof-frontend/node_modules
+# code-prof-frontend/.next
