@@ -2,3 +2,5 @@ myenv
 __pycache__
 .idea
 .DS_Store
+backend/__pycache__
+backend/CodeTesting/__pycache__
