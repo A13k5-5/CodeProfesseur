@@ -92,9 +92,19 @@ def get_student_submissions(question_id, student_id):
             result.append({
                 'submission_path': submission['path'],
                 'is_accepted': submission['is_accepted'],
-                'date': submission['date']
+                'date': submission['date'],
+                'code': get_submitted_code(submission['path'])
             })
         return jsonify(result)
     except sqlite3.Error as e:
         db.close()
         return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+def get_submitted_code(submission_path):
+    code = submission_path
+    try:
+        with open(submission_path, "r") as file:
+            code = file.read()
+    except:
+        print("Error in reading file")
+    return code

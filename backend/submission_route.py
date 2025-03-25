@@ -4,32 +4,29 @@ from database import dbmanager
 import sqlite3
 import os
 from question_route import get_student_submissions 
+import time
 
 bp = Blueprint('submission' , __name__ , url_prefix='/api/submission')
 
 @bp.route('/add_student_submission', methods=['POST'])
 def add_student_submission():
-    print("Entered")
 
     db = dbmanager()
 
     data = request.json
-    print("Received data")
     if not data or 'user' not in data or 'question' not in data or 'text' not in data:
         return jsonify({"error": "Missing required fields"}), 400
-    print("Data is correct")
-    student_submissions = get_student_submissions(data['question'], data['user'])
-    submission_count = len(student_submissions)
-    print("Got student submissions")
-    path = save_student_submission(data['user'], data['question'], data['text'], submission_count)
-    print("Got path")
-    user_id = data['user']
-    question = data['question']
-    question_id = data['question_id']
+    
+
+    # saves student code to a txt file and returns the path
+    path = save_student_submission(data['user'], data['question'], data['text'])
+
+    user_id = data['user'] # user email
+    question_id = data['question_id'] # question id
+
     print(f"User Id: {user_id}\n Question Id: {question_id}")
     try:
         db.add_docker_result_to_database(path, 0, data['user'], data['question_id'])
-        print("Added to docker")
         db.close()
         return jsonify({
             "message": "Submission added successfully", 
@@ -39,7 +36,7 @@ def add_student_submission():
         print("Error somewhere", e)
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 
-def save_student_submission(student_id, question, submission, sub_num):
+def save_student_submission(student_id, question, submission):
     base_dir = "student_submissions"
     student_dir = os.path.join(base_dir, student_id)
     if not os.path.exists(student_dir):
@@ -48,8 +45,10 @@ def save_student_submission(student_id, question, submission, sub_num):
     question_dir = os.path.join(student_dir, question)
     if not os.path.exists(question_dir):
         os.makedirs(question_dir)
+
+    timestamp = int(time.time())
     
-    file_path = os.path.join(question_dir, f"answer{sub_num}.txt")
+    file_path = os.path.join(question_dir, f"answer_{timestamp}.txt")
     with open(file_path, "w") as file:
         file.write(submission)
     

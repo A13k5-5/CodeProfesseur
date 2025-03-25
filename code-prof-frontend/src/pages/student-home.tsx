@@ -10,6 +10,7 @@ function StudentHome() {
     const user = context ? context.user : undefined;
     const email = user ? user.email : '';
     const pwd = user ? user.pwd : '';
+    const role = user ? user.type: '';
     const setUser = context ? context.setUser : undefined;
 
     const [userData, setUserData] = useState([]);
@@ -39,13 +40,13 @@ function StudentHome() {
         </div>
         <div className="container mx-auto flex justify-center space-x-4">
           <h2 className="text-center text-2xl font-bold">
-            <Link href="/student-class">
+            <Link href={role === 1 ? "/teacher-class" : "student-class"}>
               View Classrooms
             </Link>
           </h2>
           <h2 className="text-center text-2xl font-bold">
             <Link href="/join-class">
-              Join a Classroom
+            {role === 1 ? "Create a Classroom" : "Join a Classroom"}
             </Link>
           </h2>
         </div>

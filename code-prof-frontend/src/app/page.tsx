@@ -23,12 +23,18 @@ export default function Home() {
           THE Coding Education Platform
         </p>
         <div className="flex flex-row gap-16 items-center sm:items-center mt-8">
-          <Link href="/sign-in">
+          <Link href={{
+            pathname: "/sign-in",
+            query: {role : 0}
+          }}>
             <button className="s-sign-in bg-white-500 text-white py-2 px-4 rounded-full border-2 border-yellow-700 hover:bg-yellow-700 transition duration-300">
               Student Sign In
             </button>
           </Link>
-          <Link href="/sign-in">
+          <Link href={{
+            pathname: "/sign-in",
+            query: {role : 1}
+          }}>
             <button className="t-sign-in bg-white-500 text-white py-2 px-4 rounded-full border-2 border-yellow-700 hover:bg-yellow-700 transition duration-300">
               Teacher Sign In
             </button>

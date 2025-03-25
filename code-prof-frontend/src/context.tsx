@@ -5,6 +5,7 @@ import React, { createContext, useState, ReactNode } from "react";
 interface User {
     email: string;
     pwd: string;
+    type: number;
 }
 
 interface Classroom {

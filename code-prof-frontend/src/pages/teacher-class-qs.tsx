@@ -60,7 +60,7 @@ function SelectedClassroom() {
             return;
         }
 
-        fetch(`http://localhost:8080/api/classroom/${classId}/questions/${email}`)
+        fetch(`http://localhost:8080/api/classroom/${classId}/questions`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

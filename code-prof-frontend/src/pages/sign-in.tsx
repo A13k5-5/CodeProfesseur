@@ -14,9 +14,12 @@ export default function SignIn() {
     const [localPwd, setLocalPwd] = useState("");
     const router = useRouter();
 
+    const role = parseInt(router.query.role as string, 10) || 0;
+    console.log("User Role: ", role);
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        setUser({ email: localEmail, pwd: localPwd});
+        setUser({ email: localEmail, pwd: localPwd, type: role });
         router.push("/student-home");
     };
 

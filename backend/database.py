@@ -278,17 +278,21 @@ class dbmanager:
         return questions
     
     def get_class_id(self, classroom_name):
-        self.disable_row_factory()
-        self.cursor.execute('''
-        SELECT classroom.class_id
-        FROM classroom
-        WHERE classroom.name = ?
-        ''', (classroom_name,))
-        class_id_result = self.cursor.fetchone()
+        try: self.disable_row_factory()
+        except:
+            print("Error in disabling row factory")
+        try:
+            self.cursor.execute('''
+            SELECT classroom.class_id
+            FROM classroom
+            WHERE classroom.name = ?
+            ''', (classroom_name,))
+            class_id_result = self.cursor.fetchone()
+        except:
+            print("Error in query")
         if not class_id_result:
             return []
         class_id = class_id_result[0]
-        print(class_id)
         return class_id
 
     #TODO: Submit function

@@ -10,6 +10,7 @@ interface Submissions {
     submission_path: string;
     is_accepted: any;
     date: string;
+    code: string;
 }
 
 function Submission(){
@@ -20,7 +21,10 @@ function Submission(){
     const email = user ? user.email : "";
        
     const { question } = router.query;
+    const { classroom } = router.query;
     const parsedQuestion = typeof question === "string" && question.startsWith("{") ? JSON.parse(question) : question;
+    const parsedClassroom = JSON.parse(classroom as string);
+    console.log("classroom received: ", parsedClassroom);
     console.log("Question: ", parsedQuestion);
 
     const [submission, setSubmission] = useState<Submissions[]>([]);
@@ -80,6 +84,14 @@ function Submission(){
     return(<div id="main" className="flex flex-col min-h-screen">
         <header className="w-full bg-gray-800 text-white py-4">
             <h1 className="text-center text-xl">{question}</h1>
+            <Link
+                href={{
+                    pathname: '/classroom',
+                    query: { classroom: JSON.stringify(parsedClassroom)}
+                }}
+            >
+            Back to Classroom
+            </Link>
         </header>
         <main className="flex flex-col items-center justify-center flex-grow py-4">
             {submission.length > 0 ? (
@@ -89,6 +101,7 @@ function Submission(){
                             <th className="border border-gray-400 px-4 py-2 text-center">Name</th>
                             <th className="border border-gray-400 px-4 py-2 text-center">Accepted?</th>
                             <th className="border border-gray-400 px-4 py-2 text-center">Date</th>
+                            <th className="border border-gray-400 px-4 py-2 text-center">Code</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,6 +110,7 @@ function Submission(){
                                 <td className="border border-gray-400 px-4 py-2 text-center" >{question} {index + 1}</td>
                                 <td className="border border-gray-400 px-4 py-2 text-center">{submission.is_accepted ?? "N/A"}</td>
                                 <td className="border border-gray-400 px-4 py-2 text-center">{submission.date ?? "N/A"}</td>
+                                <td className="border border-gray-400 px-4 py-2 text-center">{submission.code ?? "N/A"}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -106,7 +120,11 @@ function Submission(){
                 <p>No submissions made.</p>
                 </div>
             )}
-            <Link className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-500 transition duration-300 mt-20" href={`/add-submission/${question}/`}>
+            <Link className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-500 transition duration-300 mt-20" 
+            href={{
+                pathname: `/add-submission/${question}`,
+                query: { classroom: JSON.stringify(parsedClassroom)}
+            }}>
                 Make a submission
             </Link>
         </main>

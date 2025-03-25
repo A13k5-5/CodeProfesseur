@@ -23,7 +23,18 @@ def return_classrooms():
     data = request.get_json()
     email = data.get('email')
     pwd = data.get('pwd')
+    role = data.get('role')
     print(f"Received email: {email}, pwd: {pwd}")
+    if int(role) == 1:
+        result = []
+        classrooms = db.get_teacher_classrooms(email)
+        for classroom in classrooms:
+            print(f"Class Id: {classroom[0]}")
+            print(f"Class Name: {classroom[1]}")
+            result.append({
+                'class_name' : classroom[2] 
+            })
+        return jsonify(result)
     classrooms = db.get_user_classrooms(email, pwd)
     print(f"Classrooms: {classrooms}")
     return jsonify(classrooms)
@@ -44,7 +55,12 @@ def get_user_details():
 def get_classroom_id():
     data = request.get_json()
     class_name = data.get('classroomData')
-    class_id = db.get_class_id(class_name)
+    print("Name received ", class_name)
+    try:
+        class_id = db.get_class_id(class_name)
+        print("Class Id found is: ", class_id)
+    except:
+        print("Error in querying database")
     if class_id:
         return jsonify(class_id)
     else:

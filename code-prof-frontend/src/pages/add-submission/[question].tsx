@@ -9,6 +9,9 @@ function AddSubmission(){
     const email = getUser ? (getUser.user ? getUser.user.email : "") : "";
     const router = useRouter();
     const { question } = router.query;
+    const { classroom } = router.query;
+
+    console.log("Classroom received in AddSubmission: ", classroom);
 
     const [code, setCode] = useState("");
 
@@ -49,7 +52,10 @@ function AddSubmission(){
                 }
             })
             .then(data => {
-                router.push(`/student-question/${question}`);
+                router.push({
+                    pathname: `/student-question/${question}`,
+                    query: {classroom : JSON.stringify(classroom)}
+                });
             })
             .catch(error => {
                 console.error("Error in posting submitted code ", error);

@@ -10,7 +10,7 @@ function Classrooms() {
     const user = context ? context.user : undefined;
     const email = user ? user.email : '';
     const pwd = user ? user.pwd : '';
-    const role = user ? user.type: '';
+    const role = user ? user.type : '';
 
     const [classrooms, setClassrooms] = useState([]);
         
@@ -34,7 +34,7 @@ function Classrooms() {
     const handleSubmit = (classroom: any) => {
       setUserClassroom(classroom);
       router.push({
-        pathname: `/classroom/${userClassroom}`,
+        pathname: `/teacher-class-menu/${userClassroom}`,
         query: { classroom: JSON.stringify(classroom) }
       });
     }
