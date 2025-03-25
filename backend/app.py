@@ -22,7 +22,7 @@ app.register_blueprint(teacher_route.bp)
 app.register_blueprint(question_route.bp)
 app.register_blueprint(submission_route.bp)
 
-db = dbmanager()
+db = dbmanager("professeur.db")
 
 @app.route("/api/classrooms", methods=['POST'])
 def return_classrooms():
@@ -86,7 +86,7 @@ def get_student_questions():
 
 @app.route('/api/register_user', methods=['POST'])
 def register_user():
-    db = dbmanager()
+    db = dbmanager("professeur.db")
     
     data = request.json
     if not data or 'user_id' not in data or 'first_name' not in data or 'last_name' not in data or 'type' not in data or 'password' not in data:

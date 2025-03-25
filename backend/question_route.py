@@ -7,7 +7,7 @@ bp = Blueprint('question', __name__, url_prefix='/api/question')
 
 @bp.route('/create', methods=['POST'])
 def create_question():
-    db = dbmanager()
+    db = dbmanager("professeur.db")
     data = request.json
     if not data or 'name' not in data or 'content' not in data or 'inputoutput' not in data or 'difficulty' not in data or 'classroom_ids' not in data:
         return jsonify({"error": "Missing required fields"}), 400
@@ -35,7 +35,7 @@ def create_question():
 
 @bp.route('/<string:question_name>', methods=['GET'])
 def get_question_id(question_name):
-    db = dbmanager()
+    db = dbmanager("professeur.db")
     try:
         
         question = db.get_question_id(question_name)
@@ -49,7 +49,7 @@ def get_question_id(question_name):
 
 @bp.route('/<int:question_id>', methods=['GET'])
 def get_question(question_id):
-    db = dbmanager()
+    db = dbmanager("professeur.db")
     
     try:
         if not db.question_exists(question_id):
@@ -72,7 +72,7 @@ def get_question(question_id):
         return jsonify({"error": f"Database error: {str(e)}"}), 500
 @bp.route('/<int:question_id>/<string:student_id>', methods=['GET'])
 def get_student_submissions(question_id, student_id):
-    db = dbmanager()
+    db = dbmanager("professeur.db")
     try:
         if not db.question_exists(question_id):
             db.close()

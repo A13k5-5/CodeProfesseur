@@ -7,7 +7,7 @@ bp = Blueprint('teacher', __name__, url_prefix='/api/teacher')
 
 @bp.route('/<string:teacher_id>/classrooms', methods=['GET'])
 def get_teacher_classrooms(teacher_id):
-    db = dbmanager()
+    db = dbmanager("professeur.db")
     
     try:
         #check if the teacher exists?
@@ -29,7 +29,7 @@ def get_teacher_classrooms(teacher_id):
 
 @bp.route('/<string:teacher_id>/questions', methods=['GET'])
 def get_teacher_questions(teacher_id):
-    db = dbmanager()
+    db = dbmanager("professeur.db")
     
     try:
         #check if the teacher exists?
