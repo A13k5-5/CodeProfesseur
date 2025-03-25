@@ -8,7 +8,7 @@ import sqlite3
 
 class dbmanager:
     def __init__(self, filepath):
-        self.conn = sqlite3.connect(filepath)
+        self.conn = sqlite3.connect(filepath, check_same_thread=False)
         # Added this line so values can be accessed by column name
         self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
@@ -154,6 +154,19 @@ class dbmanager:
         """
         )
         self.conn.commit()
+    
+    def get_student_question_submissions(self, user_id, question_id):
+        
+        print(f"User Id in db: {user_id}")
+        submissions = self.cursor.execute('''
+            SELECT s.path, s.is_accepted, s.date
+            FROM submission s
+            JOIN user u on s.user = u.user_id
+            JOIN question q on s.question = q.question_id
+            WHERE s.user = ? AND s.question = ?
+            ORDER BY s.date DESC 
+        ''', (user_id, question_id,)).fetchall()
+        return submissions
 
     def get_question_submissions(self, question_id):
         return self.cursor.execute(
@@ -166,6 +179,10 @@ class dbmanager:
         """,
             (question_id,),
         ).fetchall()
+    
+    def get_question_id(self, question_name):
+        question = self.cursor.execute('''SELECT q.question_id FROM question q WHERE q.name = ?''', (question_name,)).fetchone()
+        return question
 
     # Used to get all questions created by the teacher
     def get_teacher_question_id_and_names(self, teacher_id):

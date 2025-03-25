@@ -24,6 +24,8 @@ app.register_blueprint(submission_route.bp)
 
 db = dbmanager("professeur.db")
 
+worker = subq.start_worker()
+
 @app.route("/api/classrooms", methods=['POST'])
 def return_classrooms():
     data = request.get_json()
@@ -50,7 +52,9 @@ def get_user_details():
     data = request.get_json()
     email = data.get('email')
     pwd = data.get('pwd')
+    print("Failed to receive json data")
     user = db.get_user_details(email, pwd)
+    print("Can't access database")
     if user:
         print(jsonify(user))
         return jsonify(user)
@@ -137,4 +141,4 @@ def cleanup():
     
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

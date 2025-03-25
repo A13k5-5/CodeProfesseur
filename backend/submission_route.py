@@ -2,6 +2,8 @@
 from flask import Blueprint, jsonify, request
 from database import dbmanager
 import sqlite3
+import os
+import time 
 
 import queuemanager as subq
 
@@ -25,7 +27,8 @@ def add_student_submission():
 
     print(f"User Id: {user_id}\n Question Id: {question_id}")
     try:
-        db.add_docker_result_to_database(path, 0, data['user'], data['question_id'])
+        subq.add_submission(path, data['user'], data['question_id'])
+        #db.add_docker_result_to_database(path, 0, data['user'], data['question_id'])
         db.close()
         return jsonify({
             "message": "Submission added successfully", 
@@ -47,7 +50,7 @@ def save_student_submission(student_id, question, submission):
 
     timestamp = int(time.time())
     
-    file_path = os.path.join(question_dir, f"answer_{timestamp}.py")
+    file_path = os.path.join("CodeTesting/uploads/", f"answer_{timestamp}.py")
     with open(file_path, "w") as file:
         file.write(submission)
     
