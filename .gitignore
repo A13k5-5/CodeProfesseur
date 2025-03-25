@@ -4,3 +4,6 @@ __pycache__
 .DS_Store
 backend/__pycache__
 backend/CodeTesting/__pycache__
+.venv
+code-prof-frontend/node_modules
+code-prof-frontend/.next

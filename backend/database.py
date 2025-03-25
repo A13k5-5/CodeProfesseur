@@ -15,6 +15,12 @@ class dbmanager:
 
         self.conn.execute("PRAGMA foreign_keys = ON;")
         self.conn.commit()
+    
+    def disable_row_factory(self):
+        self.conn.row_factory = None
+        self.cursor = self.conn.cursor()
+        self.conn.execute('PRAGMA foreign_keys = ON;')
+        self.conn.commit()
 
     def create_db(self):
         self.cursor.execute(
@@ -275,6 +281,92 @@ class dbmanager:
         self.cursor.execute("DELETE FROM classroom")
         self.cursor.execute("DELETE FROM question")
         self.cursor.execute("DELETE FROM user")
+        
+    def get_total_submissions_for_question(self, question_id):
+        total_submissions = self.cursor.execute('''
+            SELECT COUNT(*) as count
+            FROM submission
+            WHERE question = ?
+        ''', (question_id,)).fetchone()
+        
+        return total_submissions['count'] if total_submissions else 0
+        
+        
+    # Ammar's Functions
+
+    def get_user_details(self, mail, pwd):
+        self.disable_row_factory()
+        self.cursor.execute('''
+        SELECT
+            user.user_id, user.first_name, user.last_name, user.type, user.pwd_hash,
+            classroom.class_id, classroom.teacher, classroom.name AS classroom_name,
+            question.question_id, question.name AS question_name, question.content, question.input, question.output, question.difficulty, question.due_date,
+            submission.submission_id, submission.path, submission.is_accepted, submission.date
+        FROM user
+        LEFT JOIN classroomstudent ON user.user_id = classroomstudent.student_id
+        LEFT JOIN classroom ON classroomstudent.classroom_id = classroom.class_id
+        LEFT JOIN questionclassroom ON classroom.class_id = questionclassroom.classroom_id
+        LEFT JOIN question ON questionclassroom.question_id = question.question_id
+        LEFT JOIN submission ON user.user_id = submission.user AND question.question_id = submission.question
+        WHERE user.user_id = ? AND user.pwd_hash = ?
+        ''', (mail, pwd,))
+        result = self.cursor.fetchall()
+        return result
+
+    def get_user_classrooms(self, mail, pwd):
+        self.disable_row_factory()
+        print(f"Executing query with email: {mail}, pwd: {pwd}")
+        self.cursor.execute('''
+        SELECT
+            classroom.name AS classroom_name
+        FROM user
+        LEFT JOIN classroomstudent ON user.user_id = classroomstudent.student_id
+        LEFT JOIN classroom ON classroomstudent.classroom_id = classroom.class_id
+        WHERE user.user_id = ? AND user.pwd_hash = ?
+        ''', (mail, pwd))
+        result = self.cursor.fetchall()
+        print(f"Query result: {result}")
+        return result
+    
+    def get_class_questions(self, class_id):
+        self.disable_row_factory()
+        self.cursor.execute('''
+        SELECT questionclassroom.question_id
+        FROM questionclassroom
+        WHERE questionclassroom.classroom_id = ?
+        ''', (class_id,))
+        question_ids = self.cursor.fetchall()
+
+        if not question_ids:
+            return []
+        question_ids = [q_id[0] for q_id in question_ids]
+        print(question_ids)
+
+        self.cursor.execute('''
+        SELECT * FROM question
+        WHERE question_id IN ({})
+        '''.format(','.join('?' * len(question_ids))), question_ids)
+        questions = self.cursor.fetchall()
+        return questions
+    
+    def get_class_id(self, classroom_name):
+        try: self.disable_row_factory()
+        except:
+            print("Error in disabling row factory")
+        try:
+            self.cursor.execute('''
+            SELECT classroom.class_id
+            FROM classroom
+            WHERE classroom.name = ?
+            ''', (classroom_name,))
+            class_id_result = self.cursor.fetchone()
+        except:
+            print("Error in query")
+        if not class_id_result:
+            return []
+        class_id = class_id_result[0]
+        return class_id
+
 
         self.conn.commit()
 
