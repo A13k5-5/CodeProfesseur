@@ -36,9 +36,12 @@ def create_question():
 @bp.route('/<string:question_name>', methods=['GET'])
 def get_question_id(question_name):
     db = dbmanager("professeur.db")
+    print("Get question id is called")
+    if not question_name:
+        return
     try:
-        
         question = db.get_question_id(question_name)
+        print(question)
         db.close()
         return jsonify({
                 'question_id': question['question_id']

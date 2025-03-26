@@ -64,7 +64,11 @@ def get_user_details():
 @app.route("/api/classroom_id", methods=['POST'])
 def get_classroom_id():
     data = request.get_json()
-    class_name = data.get('classroomData')
+    class_name = data.get('classroom')
+    
+    if class_name:
+        class_name = class_name.strip('"')
+
     print("Name received ", class_name)
     try:
         class_id = db.get_class_id(class_name)

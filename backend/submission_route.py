@@ -63,10 +63,13 @@ def save_student_submission(student_id, question, submission):
 @bp.route('/results/<int:question_id>', methods=['GET'])
 def get_student_results(question_id):
     db = dbmanager("professeur.db")
+
+    print("Get student results is called")
     
     try:
         # Get all submissions for this question
         submissions = db.get_question_submissions(question_id)
+        print("Got student submissions")
         
         result = []
         for submission in submissions:
@@ -74,7 +77,6 @@ def get_student_results(question_id):
                 'first_name': submission['first_name'],
                 'last_name': submission['last_name'],
                 'is_accepted': submission['is_accepted'],
-                'date': submission['date']
             })
         
         db.close()
