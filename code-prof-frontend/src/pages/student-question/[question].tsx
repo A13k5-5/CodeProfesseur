@@ -7,6 +7,7 @@ import Link from "next/link";
 interface Submissions {
     status: string;
     name: string;
+    content: string;
     submission_path: string;
     is_accepted: any;
     date: string;

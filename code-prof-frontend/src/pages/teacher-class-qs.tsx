@@ -22,30 +22,43 @@ function SelectedClassroom() {
     const classroomData = classroom ? JSON.parse(classroom as string) : null;
     const classroomContext = classcontext ? classcontext.classroom : undefined;
 
+    const class_id = classroomContext ? classroomContext.class_id : "";
+
+    console.log("Class Id in teacher-class-qs: ", class_id);
+    console.log("Classroom Data received: ", classroomData);
+
     const [classId, setClassId] = useState<number>();
     const setClassroom = classcontext ? classcontext.setClassroom : undefined;
+
+    useEffect(() => {
+        if (!class_id){
+            useEffect(() => {
+                fetch("http://localhost:8080/api/classroom_id", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ classroomData })
+                })
+                    .then(response => response.json())
+                    .then((data) => {
+                        setClassId(data);
+                    });
+            }, [classroomData]);
+        }
+        else if (class_id) {
+            setClassId(class_id);
+        }
+    }, [class_id, classroomData]);
+
+    console.log(classId);
 
     useEffect(() => {
         if (setClassroom && classId) {
             setClassroom({ class_id: Number(classId), class_questions: [] });
         }
     }, [setClassroom, classId]);
-
-    useEffect(() => {
-        fetch("http://localhost:8080/api/classroom_id", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ classroomData })
-        })
-            .then(response => response.json())
-            .then((data) => {
-                setClassId(data);
-            });
-    }, [classroomData]);
-
-    console.log(classId);
+    
 
     const [questions, setQuestions] = useState<Question[]>([]);
 

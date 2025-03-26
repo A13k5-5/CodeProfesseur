@@ -37,7 +37,7 @@ function SelectedClassroom() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ classroomData })
+            body: JSON.stringify({ classroom })
         })
             .then(response => response.json())
             .then((data) => {
@@ -45,9 +45,11 @@ function SelectedClassroom() {
             });
     }, [classroomData]);
 
-    console.log(classId);
+    console.log("Class Id: ", classId);
+    console.log("Email: ", email);
 
     const [questions, setQuestions] = useState<Question[]>([]);
+
 
     useEffect(() => {
         if (!classId || !email) {

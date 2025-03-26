@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
-import { userContext } from '../context';
+import { userContext, classContext } from '../context';
 import "../styles/globals.css";
 import Link from "next/link";
 
@@ -11,6 +11,21 @@ function TeacherClassMenu() {
   const email = user ? user.email : '';
   const pwd = user ? user.pwd : '';
   const role = user ? user.type : '';
+
+  const router = useRouter();
+  const { classroom } = router.query;
+
+  console.log("Classroom Received: ", classroom);
+
+  const classroomContext = useContext(classContext);
+  if (!classroomContext){
+    console.log("Classroom Context does not appear")
+  }
+  const class_interface = classroomContext ? classroomContext.classroom : undefined;
+  if (!class_interface){
+    console.log("Class Interface does not appear")
+  }
+  const setClassroom = classroomContext ? classroomContext.setClassroom : undefined;
 
   const [classrooms, setClassrooms] = useState([]);
       
@@ -28,9 +43,30 @@ function TeacherClassMenu() {
       });
   }, [email, pwd, role]);
 
-  const router = useRouter();
+  useEffect(() => {
+          fetch("http://localhost:8080/api/classroom_id", {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ classroom })
+          })
+              .then(response => response.json())
+              .then((data) => {
+                  if (setClassroom) {
+                      setClassroom({
+                        class_id: data,
+                        class_questions: []
+                      });
+                  }
+              });
+      }, [classroom]);
 
-  const { classroom } = router.query;
+  if (class_interface) {
+    console.log("ClassId in context: ", class_interface.class_id);
+  } else {
+    console.log("ClassId: Not available");
+  }
 
   const handleSubmit = (classroom: any) => {
     router.push({

@@ -17,21 +17,41 @@ function AddSubmission(){
 
     const [questionId, setQuestionId] = useState<number | null>(null);
     
-        useEffect(() => {
-            fetch(`http://localhost:8080/api/question/${question}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                setQuestionId(data.question_id); 
-            })
-            .catch(error => {
-                console.error("Error fetching question ID:", error);
-            });
-        }, [question]); 
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/question/${question}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            setQuestionId(data.question_id); 
+        })
+        .catch(error => {
+            console.error("Error fetching question ID:", error);
+        });
+    }); 
+
+    const [questionContent, setQuestionContent] = useState([]);
+    
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/question/${questionId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            setQuestionContent(data['content']); 
+        })
+        .catch(error => {
+            console.error("Error fetching question ID:", error);
+        });
+    }, [questionId]); 
+
+    console.log("Content is: ", questionContent);
 
     const handleSubmit = () => {
             fetch('http://localhost:8080/api/submission/add_student_submission', {
@@ -64,7 +84,8 @@ function AddSubmission(){
     
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <h1 className="text-2xl font-bold mb-4">Add Submission for: {question}</h1>
+            <h1 className="text-2xl font-bold mb-4 text-black">Add Submission for: {question}</h1>
+            <p className="text-xl mb-4 text-black">{questionContent}</p>
             <textarea
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
