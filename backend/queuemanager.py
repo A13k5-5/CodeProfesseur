@@ -30,7 +30,7 @@ def process_submission(submission_path, user_id, question_id):
 
         # #Add the result to the database
 
-        ret = 1 if result == "All tests passed!" else 0
+        ret = 1 if "All tests passed!" in result else 0
 
         dbm = dbmanager("professeur.db")
         dbm.add_docker_result_to_database(submission_path, ret, user_id, question_id)
