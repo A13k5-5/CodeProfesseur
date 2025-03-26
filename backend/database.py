@@ -410,7 +410,7 @@ class dbmanager:
         )  # This is a bit dangerous
         self.add_question(
             "Example question",
-            "Write a function \"answer\" that takes an integer and always returns 1",
+            "Write a function answer that takes an integer and always returns 1",
             input_json,
             output_json,
             "easy",
