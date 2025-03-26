@@ -11,10 +11,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from database import dbmanager
 import classroom_route, teacher_route, question_route, submission_route
 import sqlite3
+import re 
 
 
 app = Flask(__name__)
 CORS(app)
+
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:3000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # Register blueprints
 app.register_blueprint(classroom_route.bp)
@@ -67,7 +76,7 @@ def get_classroom_id():
     class_name = data.get('classroom')
     
     if class_name:
-        class_name = class_name.strip('"')
+        class_name = re.sub(r'[^a-zA-Z0-9\s]', '', class_name)
 
     print("Name received ", class_name)
     try:

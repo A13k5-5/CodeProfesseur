@@ -4,6 +4,7 @@ from database import dbmanager
 import sqlite3
 import os
 import time 
+from question_route import get_submitted_code 
 
 import queuemanager as subq
 
@@ -70,6 +71,7 @@ def get_student_results(question_id):
         # Get all submissions for this question
         submissions = db.get_question_submissions(question_id)
         print("Got student submissions")
+
         
         result = []
         for submission in submissions:
@@ -77,6 +79,7 @@ def get_student_results(question_id):
                 'first_name': submission['first_name'],
                 'last_name': submission['last_name'],
                 'is_accepted': submission['is_accepted'],
+                'code': get_submitted_code(submission['path'])
             })
         
         db.close()

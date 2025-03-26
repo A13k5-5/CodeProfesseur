@@ -67,10 +67,12 @@ def get_classroom_students(classroom_id):
         students = db.get_users_in_classroom(classroom_id)
         result = []
         for student in students:
+            num_subs = db.get_num_submissions_in_class(student['user_id'], classroom_id)
             result.append({
                 'first_name': student['first_name'],
                 'last_name': student['last_name'],
-                'user_id': student['user_id']
+                'user_id': student['user_id'],
+                'num_submissions': num_subs
             })
         
         db.close()

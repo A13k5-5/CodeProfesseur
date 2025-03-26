@@ -7,14 +7,11 @@ bp = Blueprint('question', __name__, url_prefix='/api/question')
 
 @bp.route('/create', methods=['POST'])
 def create_question():
+    print("Create Question is called")
     db = dbmanager("professeur.db")
     data = request.json
-    if not data or 'name' not in data or 'content' not in data or 'input' not in data or 'output' not in data or 'difficulty' not in data or 'classroom_ids' not in data:
-        return jsonify({"error": "Missing required fields"}), 400
-    
-    for field in data:
-        print(data.get(field))
 
+    
     try:
         input_data = data['input']
         output_data = data['output']
@@ -24,7 +21,6 @@ def create_question():
         question_id = db.conn.execute('SELECT last_insert_rowid()').fetchone()[0]
         
         # Assign the question to classrooms
-
         db.assign_question(question_id, data['classroom_ids'])
         
         db.close()
@@ -44,7 +40,7 @@ def get_question_id(question_name):
         return
     try:
         question = db.get_question_id(question_name)
-        print(question)
+        print("Question id in backend is", question['question_id'])
         db.close()
         return jsonify({
                 'question_id': question['question_id']

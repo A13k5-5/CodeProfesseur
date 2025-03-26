@@ -60,8 +60,8 @@ function CreateQuestion(){
         })
         .then(data => {
             router.push({
-                pathname: `/teacher-class-menu`,
-                query: {classroom : JSON.stringify(classroom)}
+                pathname: `/teacher-class-qs`,
+                query: {classroom : classroom}
             });
         })
         .catch(error => {

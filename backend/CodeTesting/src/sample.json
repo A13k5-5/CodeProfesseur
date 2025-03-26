@@ -1,1 +1,1 @@
-{"input": [[1], [2], [3]], "output": [1, 1, 1], "submission_path": "CodeTesting/uploads/answer_1742999255.py", "func_name": "returnTwo"}
+{"input": [[1], [2], [3], [4], [5], [6], [7]], "output": [1, 1, 1, 1, 1, 1, 1], "submission_path": "CodeTesting/uploads/answer_1743030175.py", "func_name": "answer"}

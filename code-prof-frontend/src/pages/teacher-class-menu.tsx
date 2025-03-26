@@ -70,7 +70,7 @@ function TeacherClassMenu() {
 
   const handleSubmit = (classroom: any) => {
     router.push({
-      pathname: `/teacher-class-menu/${classroom}`,
+      pathname: `/teacher-class-menu`,
       query: { classroom: JSON.stringify(classroom) }
     });
   };
@@ -87,7 +87,7 @@ function TeacherClassMenu() {
         <Link href={{pathname: "/teacher-class-students", query: {classroom : classroom}}} className="w-64 text-center bg-green-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
           View Students
         </Link>
-        <Link href={{pathname: "/create-question", query: {classroom : classroom}}}  className="w-64 text-center bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300">
+        <Link href="/create-question" className="w-64 text-center bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300">
           Create a Question
         </Link>
       </main>

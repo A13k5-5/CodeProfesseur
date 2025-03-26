@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { useRouter } from "next/router";
 import { userContext, classContext } from '../context';
 import "../styles/globals.css";
@@ -7,6 +7,7 @@ interface Student {
     first_name: string;
     last_name?: number;
     user_id?: number;
+    num_submissions: number;
 }
 
 function SelectedClassroom() {
@@ -17,50 +18,49 @@ function SelectedClassroom() {
     const user = usercontext ? usercontext.user : undefined;
     const email = user ? user.email : "";
 
-    const class_id = classcontext && classcontext.classroom ? classcontext.classroom.class_id : "";
-
     const { classroom } = router.query;
 
     console.log("Classroom Name is : ", classroom);
 
-    const classroomData = classroom ? JSON.parse(classroom as string) : null;
+    const classroomData = useMemo(() => {
+        return classroom ? JSON.parse(classroom as string) : null;
+    }, [classroom]);
 
     console.log("Classroom Data is : ", classroomData);
 
     const classroomContext = classcontext ? classcontext.classroom : undefined;
+    const class_id = classroomContext ? classroomContext.class_id : undefined;
 
     const [classId, setClassId] = useState<number>();
     const setClassroom = classcontext ? classcontext.setClassroom : undefined;
 
-    console.log("Class Id in context here is : ", class_id);
-
-    useEffect(() => {
-        if (setClassroom && classId) {
-            setClassroom({ class_id: Number(classId), class_questions: [] });
-        }
-    }, [setClassroom, classId]);
-
-    useEffect(() => {
-        fetch("http://localhost:8080/api/classroom_id", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ classroomData })
-        })
-            .then(response => response.json())
-            .then((data) => {
-                setClassId(data);
-            });
-    }, [classroomData]);
-
-    console.log("Class Id is: ", classId);
-
     const [students, setStudents] = useState<Student[]>([]);
 
     useEffect(() => {
-        if (!classId || !email) {
-            if (!classId) {
+              fetch("http://localhost:8080/api/classroom_id", {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ classroom })
+              })
+                  .then(response => response.json())
+                  .then((data) => {
+                      if (setClassroom) {
+                          setClassroom({
+                            class_id: data,
+                            class_questions: []
+                          });
+                      }
+                  });
+          }, [classroom]);
+
+    console.log("Class Id in context: ", class_id);
+
+
+    useEffect(() => {
+        if (!class_id || !email) {
+            if (!class_id) {
                 console.log("ClassId not present");
             }
             if (!email) {
@@ -69,7 +69,7 @@ function SelectedClassroom() {
             return;
         }
 
-        fetch(`http://localhost:8080/api/classroom/${classId}/students`)
+        fetch(`http://localhost:8080/api/classroom/${class_id}/students`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -82,7 +82,7 @@ function SelectedClassroom() {
             .catch(error => {
                 console.error("Error fetching questions:", error);
             });
-    });
+    }, [classId, email]);
 
     const [selectedQuestion, setSelectedQuestion] = useState([]);
 
@@ -109,6 +109,7 @@ function SelectedClassroom() {
                             <tr className="bg-black-200">
                                 <th className="border border-gray-400 px-4 py-2 text-center">Name</th>
                                 <th className="border border-gray-400 px-4 py-2 text-center">Email</th>
+                                <th className="border border-gray-400 px-4 py-2 text-center">Total Submissions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,6 +117,7 @@ function SelectedClassroom() {
                                 <tr key={index} className={index % 2 === 0 ? "bg-black" : "bg-gray"}>
                                     <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(student.user_id)}}>{student.first_name} {student.last_name}</td>
                                     <td className="border border-gray-400 px-4 py-2 text-center">{student.user_id ?? "N/A"}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{student.num_submissions}</td>
                                 </tr>
                             ))}
                         </tbody>

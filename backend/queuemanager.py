@@ -21,7 +21,7 @@ def process_submission(submission_path, user_id, question_id):
         output_json = question["output"]
 
         # Execute the bash script and get the result
-        result = exec_bash(input_json, output_json, submission_path, "returnTwo")
+        result = exec_bash(input_json, output_json, submission_path, "answer")
 
         # Log the result to a file
         f = open("log.txt", "a")
@@ -30,7 +30,7 @@ def process_submission(submission_path, user_id, question_id):
 
         # #Add the result to the database
 
-        ret = 1 if result == "All tests passed!" else 0
+        ret = 1 if "All tests passed!" in result else 0
 
         dbm = dbmanager("professeur.db")
         dbm.add_docker_result_to_database(submission_path, ret, user_id, question_id)

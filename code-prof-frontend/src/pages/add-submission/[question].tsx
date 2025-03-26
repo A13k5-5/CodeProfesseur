@@ -4,84 +4,99 @@ import { userContext, classContext } from '../../context';
 import "../../styles/globals.css";
 import Link from "next/link";
 
-function AddSubmission(){
+function AddSubmission() {
     const getUser = useContext(userContext);
     const email = getUser ? (getUser.user ? getUser.user.email : "") : "";
     const router = useRouter();
     const { question } = router.query;
-    const { classroom } = router.query;
-
-    console.log("Classroom received in AddSubmission: ", classroom);
 
     const [code, setCode] = useState("");
-
     const [questionId, setQuestionId] = useState<number | null>(null);
-    
-    useEffect(() => {
-        fetch(`http://localhost:8080/api/question/${question}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            setQuestionId(data.question_id); 
-        })
-        .catch(error => {
-            console.error("Error fetching question ID:", error);
-        });
-    }, [questionId]); 
+    const [questionContent, setQuestionContent] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const [questionContent, setQuestionContent] = useState([]);
-    
     useEffect(() => {
-        fetch(`http://localhost:8080/api/question/${questionId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            setQuestionContent(data['content']); 
-        })
-        .catch(error => {
-            console.error("Error fetching question ID:", error);
-        });
-    }, [questionId]); 
+        console.log("Router is ready:", router.isReady);
+        console.log("Question from query:", question);
+    }, [router.isReady, question]);
 
-    console.log("Content is: ", questionContent);
+    useEffect(() => {
+        if (router.isReady && question && typeof question === 'string') {
+            const fetchQuestionId = async () => {
+                try {
+                    setIsLoading(true);
+                    const response = await fetch(`http://localhost:8080/api/question/${question}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    setQuestionId(data.question_id);
+                    
+                    const contentResponse = await fetch(`http://localhost:8080/api/question/${data.question_id}`);
+                    if (!contentResponse.ok) {
+                        throw new Error(`HTTP error! Status: ${contentResponse.status}`);
+                    }
+                    
+                    const contentData = await contentResponse.json();
+                    setQuestionContent(contentData['content'] || '');
+                } catch (err) {
+                    console.error("Error fetching question details:", err);
+                    setError(err instanceof Error ? err.message : "Failed to fetch question details");
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            fetchQuestionId();
+        } else if (router.isReady) {
+            setError("Invalid question identifier");
+            setIsLoading(false);
+        }
+    }, [router.isReady, question]);
 
     const handleSubmit = () => {
-            fetch('http://localhost:8080/api/submission/add_student_submission', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    user: email,
-                    question_id: questionId,
-                    question: question,
-                    text: code
-                })
+        if (!questionId) {
+            setError("Question ID is not available");
+            return;
+        }
+
+        fetch('http://localhost:8080/api/submission/add_student_submission', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user: email,
+                question_id: questionId,
+                question: question,
+                text: code
             })
-            .then(response => {
-                if (!response.ok){
-                    throw new Error(`HTTP Error! Status: ${response.status}`);
-                }
-            })
-            .then(data => {
-                router.push({
-                    pathname: `/student-question/${question}`,
-                    query: {classroom : JSON.stringify(classroom)}
-                });
-            })
-            .catch(error => {
-                console.error("Error in posting submitted code ", error);
+        })
+        .then(response => {
+            if (!response.ok){
+                throw new Error(`HTTP Error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(() => {
+            router.push({
+                pathname: `/student-question/${question}`,
+                query: {classroom : router.query.classroom}
             });
+        })
+        .catch(error => {
+            console.error("Error in posting submitted code ", error);
+            setError("Failed to submit code");
+        });
     }
     
+    if (isLoading || error) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <h1 className="text-2xl font-bold mb-4 text-black">Add Submission for: {question}</h1>

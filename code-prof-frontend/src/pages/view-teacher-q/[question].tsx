@@ -19,110 +19,80 @@ function ViewAllSubmissions() {
     const usercontext = useContext(userContext);
     const classcontext = useContext(classContext);
     
-    const user = usercontext ? usercontext.user : undefined;
-    const email = user ? user.email : "";
-
-    const { classroom } = router.query;
-
-    console.log("Classroom: ", classroom);
-
-    const classroomData = classroom ? JSON.parse(classroom as string) : null;
-    const classroomContext = classcontext ? classcontext.classroom : undefined;
-
-    const { question } = router.query;
-
-    console.log("Question: ", question);
-
-    const questionData = question ? question : null;
-
-
-    const classId = classroomContext ? classroomContext.class_id : undefined;
-
-    const [questionId, setQuestionId] = useState([]);
-
-    const setClassroom = classcontext ? classcontext.setClassroom : undefined;
-
-    {/*useEffect(() => {
-        if (setClassroom && classId) {
-            setClassroom({ class_id: Number(classId), class_questions: [] });
-        }
-    }, [setClassroom, classId]);*/}
-
-    {/*useEffect(() => {
-        fetch("http://localhost:8080/api/classroom_id", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ classroomData })
-        })
-            .then(response => response.json())
-            .then((data) => {
-                setClassId(data);
-            });
-    }, [classroomData]);*/}
-
-    console.log("Class Id is: ", classId);
+    const { question, classroom } = router.query;
 
     const [submissions, setSubmissions] = useState<Submission[]>([]);
+    const [error, setError] = useState<string | null>(null);
+
+    const [questionId, setQuestionId] = useState<number>();
 
     useEffect(() => {
-        if (!question) {
-            console.log("Question not present");
-            return;
-        }
+        const fetchQuestionId = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/api/question/${question}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
 
-        fetch(`http://localhost:8080/api/question/${questionData}`)
-            .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(data => {
-                setQuestionId(data['question_id']);
-            })
-            .catch(error => {
-                console.error("Error fetching questionId:", error);
-            })
-    })
 
-    console.log("Question Id Received: ", questionId);
+                const data = await response.json();
+                setQuestionId(data.question_id);
+            } catch (error) {
+                console.error("Error fetching question ID:", error);
+                setError("Could not fetch current question");
+            }
+        };
+
+        fetchQuestionId();
+    }, []);
+
+    console.log("Question Id is: ", questionId);
 
     useEffect(() => {
-
-        if (!questionId) {
-            console.log("Question not present");
+        if (!question || !questionId) {
             return;
         }
-        
 
-        fetch(`http://localhost:8080/api/submission/results/${questionId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                setSubmissions(data);
-            })
-            .catch(error => {
-                console.error("Error fetching questions:", error);
-            });
-    });
+        fetch(`http://localhost:8080/api/submission/results/${questionId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log("Response status:", response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Fetched submissions:", data);
+            setSubmissions(data);
+        })
+        .catch(error => {
+            console.error("Error fetching submissions:", error);
+            setError(error.message);
+        });
+    }, [question, questionId]);
 
-    const [selectedQuestion, setSelectedQuestion] = useState([]);
-
-    const handleSubmit = (question : any) => {
-      console.log("question ", question);
-      console.log("classroom to send: ", classroom)
-      router.push({
-        pathname: `/student-question/${question}`,
-        query: { question: JSON.stringify(question),
+    const handleSubmit = (submissionFirstName: string) => {
+        router.push({
+            pathname: `/student-question/${submissionFirstName}`,
+            query: { 
+                question: JSON.stringify(question),
                 classroom: JSON.stringify(classroom)
             }
-      });
+        });
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
     return (
@@ -137,19 +107,34 @@ function ViewAllSubmissions() {
                             <tr className="bg-black-200">
                                 <th className="border border-gray-400 px-4 py-2 text-center">Student Name</th>
                                 <th className="border border-gray-400 px-4 py-2 text-center">Accepted?</th>
+                                <th className="border border-gray-400 px-4 py-2 text-center">Code</th>
                             </tr>
                         </thead>
                         <tbody>
                             {submissions.map((submission, index) => (
                                 <tr key={index} className={index % 2 === 0 ? "bg-black" : "bg-gray"}>
-                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(submission.first_name)}}>{submission.first_name} {submission.last_name}</td>
-                                    <td className="border border-gray-400 px-4 py-2 text-center">{submission.is_accepted === 0 ? "Failed tests" : "Passed all tests"}</td>
+                                    <td 
+                                        className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" 
+                                        onClick={() => handleSubmit(submission.first_name)}
+                                    >
+                                        {submission.first_name} {submission.last_name} 
+                                    </td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">
+                                        {submission.is_accepted == null
+                                            ? "N/A"
+                                            : submission.is_accepted === 0
+                                            ? "Failed tests"
+                                            : "Passed all tests"
+                                        }
+                                    </td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700"
+                                    >{submission.code}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 ) : (
-                    <p>No submission made.</p>
+                    <p>No submissions made.</p>
                 )}
             </main>
         </div>

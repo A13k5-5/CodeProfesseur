@@ -25,7 +25,6 @@ function Submission(){
     const { classroom } = router.query;
     const parsedQuestion = typeof question === "string" && question.startsWith("{") ? JSON.parse(question) : question;
     const parsedClassroom = JSON.parse(classroom as string);
-    console.log("Unparsed classroom received: ", classroom);
     console.log("classroom received: ", parsedClassroom);
     console.log("Question: ", parsedQuestion);
 
