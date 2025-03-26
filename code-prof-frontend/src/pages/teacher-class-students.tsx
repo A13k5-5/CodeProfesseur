@@ -17,6 +17,8 @@ function SelectedClassroom() {
     const user = usercontext ? usercontext.user : undefined;
     const email = user ? user.email : "";
 
+    const class_id = classcontext && classcontext.classroom ? classcontext.classroom.class_id : "";
+
     const { classroom } = router.query;
 
     console.log("Classroom Name is : ", classroom);
@@ -29,6 +31,8 @@ function SelectedClassroom() {
 
     const [classId, setClassId] = useState<number>();
     const setClassroom = classcontext ? classcontext.setClassroom : undefined;
+
+    console.log("Class Id in context here is : ", class_id);
 
     useEffect(() => {
         if (setClassroom && classId) {
@@ -78,7 +82,7 @@ function SelectedClassroom() {
             .catch(error => {
                 console.error("Error fetching questions:", error);
             });
-    }, [classId, email]);
+    });
 
     const [selectedQuestion, setSelectedQuestion] = useState([]);
 

@@ -85,7 +85,7 @@ function ViewAllSubmissions() {
             .catch(error => {
                 console.error("Error fetching questionId:", error);
             })
-    }, [questionId])
+    })
 
     console.log("Question Id Received: ", questionId);
 
@@ -110,7 +110,7 @@ function ViewAllSubmissions() {
             .catch(error => {
                 console.error("Error fetching questions:", error);
             });
-    }, [classId, question]);
+    });
 
     const [selectedQuestion, setSelectedQuestion] = useState([]);
 
@@ -142,8 +142,8 @@ function ViewAllSubmissions() {
                         <tbody>
                             {submissions.map((submission, index) => (
                                 <tr key={index} className={index % 2 === 0 ? "bg-black" : "bg-gray"}>
-                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(submission.first_name)}}>{submission.first_name} {submission.last_name} User Name</td>
-                                    <td className="border border-gray-400 px-4 py-2 text-center">{submission.is_accepted ?? "N/A"} Is Accepted</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700" onClick={() => { handleSubmit(submission.first_name)}}>{submission.first_name} {submission.last_name}</td>
+                                    <td className="border border-gray-400 px-4 py-2 text-center">{submission.is_accepted === 0 ? "Failed tests" : "Passed all tests"}</td>
                                 </tr>
                             ))}
                         </tbody>

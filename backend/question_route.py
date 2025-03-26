@@ -9,20 +9,23 @@ bp = Blueprint('question', __name__, url_prefix='/api/question')
 def create_question():
     db = dbmanager("professeur.db")
     data = request.json
-    if not data or 'name' not in data or 'content' not in data or 'inputoutput' not in data or 'difficulty' not in data or 'classroom_ids' not in data:
+    if not data or 'name' not in data or 'content' not in data or 'input' not in data or 'output' not in data or 'difficulty' not in data or 'classroom_ids' not in data:
         return jsonify({"error": "Missing required fields"}), 400
     
+    for field in data:
+        print(data.get(field))
+
     try:
-        input_data = data['inputoutput'].get('input', {})
-        output_data = data['inputoutput'].get('output', {})
+        input_data = data['input']
+        output_data = data['output']
         db.add_question(data['name'], data['content'], input_data, output_data, data['difficulty'], data.get('due_date', None))
             
         # Get the ID of the question we just added
         question_id = db.conn.execute('SELECT last_insert_rowid()').fetchone()[0]
         
         # Assign the question to classrooms
-        for classroom_id in data['classroom_ids']:
-            db.assign_question(question_id, classroom_id)
+
+        db.assign_question(question_id, data['classroom_ids'])
         
         db.close()
         return jsonify({

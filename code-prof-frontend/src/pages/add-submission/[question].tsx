@@ -31,7 +31,7 @@ function AddSubmission(){
         .catch(error => {
             console.error("Error fetching question ID:", error);
         });
-    }); 
+    }, [questionId]); 
 
     const [questionContent, setQuestionContent] = useState([]);
     
