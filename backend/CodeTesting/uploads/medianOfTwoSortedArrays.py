@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # generate expected outputs
     outputs = []
     for test in tests:
-        outputs.append([answer(*test)])
+        outputs.append(answer(*test))
 
     with open("medianOfTwoSortedListsOutputs.json", "w") as file:
         file.write(json.dumps(outputs))
