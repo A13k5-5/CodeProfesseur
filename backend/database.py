@@ -392,7 +392,7 @@ class dbmanager:
 
         # Define the test cases as Python objects
         test_input = [[1], [2], [3], [4], [5], [6], [7]]
-        test_output = [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7]]
+        test_output = [[1], [1], [1], [1], [1], [1], [1]]
 
         # Convert to JSON strings
         input_json = json.dumps(test_input)
@@ -408,11 +408,11 @@ class dbmanager:
             "alex.pison.24@ucl.ac.uk", 1
         )  # This is a bit dangerous
         self.add_question(
-            "Trivia",
-            "What happened during the last Talk Tuah Podcast episode?",
+            "Example question",
+            "Write a function \"answer\" that takes an integer and always returns 1",
             input_json,
             output_json,
-            "hard",
+            "easy",
             "2025-02-02",
         )
         self.assign_question(1, 1)  # This is a bit dangerous

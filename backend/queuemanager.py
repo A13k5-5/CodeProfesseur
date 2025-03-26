@@ -21,7 +21,7 @@ def process_submission(submission_path, user_id, question_id):
         output_json = question["output"]
 
         # Execute the bash script and get the result
-        result = exec_bash(input_json, output_json, submission_path, "returnTwo")
+        result = exec_bash(input_json, output_json, submission_path, "answer")
 
         # Log the result to a file
         f = open("log.txt", "a")
