@@ -1,2 +1,3 @@
-def returnTwo(a: int):
-    return [a, a]
+def answer(a: int):
+    while True:
+        a = 1
