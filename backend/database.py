@@ -52,7 +52,7 @@ class dbmanager:
         CREATE TABLE IF NOT EXISTS submission (
             submission_id INTEGER PRIMARY KEY,
             path TEXT NOT NULL,
-            is_accepted INTEGER DEFAULT 0,
+            is_accepted TEXT,
             user TEXT NOT NULL,
             question INTEGER NOT NULL,
             date TEXT,
