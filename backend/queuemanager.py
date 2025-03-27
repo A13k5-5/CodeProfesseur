@@ -2,7 +2,7 @@ import threading
 import queue
 
 from database import dbmanager
-from CodeTesting.runBash import exec_bash
+from backend.CodeTesting.code_exec import evaluate_submission
 
 # Queue to hold submissions for processing
 submission_queue = queue.Queue()
@@ -21,7 +21,7 @@ def process_submission(submission_path, user_id, question_id):
         output_json = question["output"]
 
         # Execute the bash script and get the result
-        result = exec_bash(input_json, output_json, submission_path, "answer")
+        result = evaluate_submission(input_json, output_json, submission_path, "answer")
 
         # Log the result to a file
         f = open("log.txt", "a")
