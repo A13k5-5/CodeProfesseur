@@ -8,3 +8,4 @@ backend/CodeTesting/__pycache__
 code-prof-frontend/node_modules
 code-prof-frontend/.next
 backend/CodeTesting/uploads
+.env
