@@ -1,0 +1,3 @@
+Incorrect for input: [1], received: [1, 1], expected: 1
+All tests passed!
+Time limit exceeded

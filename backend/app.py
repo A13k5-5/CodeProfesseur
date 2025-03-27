@@ -7,7 +7,6 @@ import classroom_route, teacher_route, question_route, submission_route
 import sqlite3
 import atexit
 import queuemanager as subq
-from werkzeug.security import generate_password_hash, check_password_hash
 from database import dbmanager
 import classroom_route, teacher_route, question_route, submission_route
 import sqlite3
