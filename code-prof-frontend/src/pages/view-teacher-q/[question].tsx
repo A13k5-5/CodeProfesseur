@@ -9,7 +9,7 @@ interface Submission {
     last_name: string;
     content: string;
     submission_path: string;
-    is_accepted: any;
+    is_accepted: string;
     date: string;
     code: string;
 }
@@ -120,12 +120,7 @@ function ViewAllSubmissions() {
                                         {submission.first_name} {submission.last_name} 
                                     </td>
                                     <td className="border border-gray-400 px-4 py-2 text-center">
-                                        {submission.is_accepted == null
-                                            ? "N/A"
-                                            : submission.is_accepted === 0
-                                            ? "Failed tests"
-                                            : "Passed all tests"
-                                        }
+                                        {submission.is_accepted}
                                     </td>
                                     <td className="border border-gray-400 px-4 py-2 text-center cursor-pointer hover:bg-blue-700"
                                     >{submission.code}</td>

@@ -9,7 +9,7 @@ interface Submissions {
     name: string;
     content: string;
     submission_path: string;
-    is_accepted: any;
+    is_accepted: string;
     date: string;
     code: string;
 }
@@ -70,15 +70,6 @@ function Submission(){
     }, [questionId, email]); 
 
     console.log("Submission Data: ", submission.map(sub => sub.submission_path))
-
-    for (let sub of submission) {
-        if (sub.is_accepted === 0) {
-            sub.is_accepted = "Failed tests";
-        }
-        else {
-            sub.is_accepted = "Passed all tests";
-        }
-    }
 
     console.log("Submission Status: ", submission.map(sub => sub.status));
 
