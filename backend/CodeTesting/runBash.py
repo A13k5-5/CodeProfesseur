@@ -47,7 +47,7 @@ def exec_bash(input_json, output_json, submission_path, func_name):
     result = judge0.run(
         source_code=wrapper, additional_files=fs, cpu_time_limit=CPU_TIME_LIMIT
     )
-    return "Time limit exceeded" if result.stdout == None else result.stdout
+    return "Time limit exceeded\n" if result.stdout == None else result.stdout
 
 
 if __name__ == "__main__":
