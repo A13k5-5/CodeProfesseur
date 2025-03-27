@@ -1,5 +1,8 @@
 import subprocess
 import json
+import os
+import judge0
+from judge0 import File, Filesystem
 
 
 def write_sample_json(input_json, output_json, submission_path, func_name):
@@ -19,19 +22,27 @@ def write_sample_json(input_json, output_json, submission_path, func_name):
 
 def exec_bash(input_json, output_json, submission_path, func_name):
     write_sample_json(input_json, output_json, submission_path, func_name)
+    submission_fileName = os.path.basename(submission_path)
 
-    try:
-        result = subprocess.run(
-            ["bash", "./CodeTesting/run_tests.sh"],
-            check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-        )
-        output = result.stdout
-        return output
-    except subprocess.CalledProcessError as e:
-        return e.stderr
+    with open("./CodeTesting/src/sample.json", "r") as file:
+        sample_json = file.read()
+
+    with open("./CodeTesting/src/test_wrapper.py", "r") as file:
+        wrapper = file.read()
+
+    # Take the submitted file from uploades folder
+    with open(f"./CodeTesting/uploads/{submission_fileName}", "r") as file:
+        solution = file.read()
+
+    fs = Filesystem(
+        content=[
+            File(name="sample.json", content=sample_json),
+            # Renames any solution into solution.py
+            File(name=submission_fileName, content=solution),
+        ]
+    )
+    result = judge0.run(source_code=wrapper, additional_files=fs)
+    return result.stdout
 
 
 if __name__ == "__main__":

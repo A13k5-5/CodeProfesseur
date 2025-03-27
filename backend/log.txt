@@ -18,3 +18,7 @@ Incorrect for input: [1], received: [1, 2], expected: [1, 1]
 All tests passed!
 All tests passed!
 All test passed!
+All tests passed!
+All tests passed!
+All tests passed!
+Incorrect for input: [1], received: [1, 2], expected: [1, 1]
