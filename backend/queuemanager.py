@@ -87,9 +87,3 @@ def add_submission(submission_path, user_id, question_id):
     submission_queue.put(
         {"path": submission_path, "user_id": user_id, "question_id": question_id}
     )
-
-
-if __name__ == "__main__":
-    worker = start_worker()
-    add_submission("./CodeTesting/src/forSampleJson.py", "alex.pison.24@ucl.ac.uk", "1")
-    stop_worker()

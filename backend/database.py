@@ -432,6 +432,9 @@ class dbmanager:
         self.conn.close()
 
 
+
+# Run the main function using python database.py
+# to reset the database into its example configuration
 if __name__ == "__main__":
     man = dbmanager("professeur.db")
     man.create_db()
