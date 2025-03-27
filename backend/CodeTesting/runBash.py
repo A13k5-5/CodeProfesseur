@@ -2,7 +2,7 @@ import subprocess
 import json
 
 
-def exec_bash(input_json, output_json, submission_path, func_name):
+def write_sample_json(input_json, output_json, submission_path, func_name):
     input_data = json.loads(input_json)
     output_data = json.loads(output_json)
 
@@ -15,6 +15,11 @@ def exec_bash(input_json, output_json, submission_path, func_name):
 
     with open("./CodeTesting/src/sample.json", "w") as file:
         json.dump(combined_data, file)
+
+
+def exec_bash(input_json, output_json, submission_path, func_name):
+    write_sample_json(input_json, output_json, submission_path, func_name)
+
     try:
         result = subprocess.run(
             ["bash", "./CodeTesting/run_tests.sh"],
