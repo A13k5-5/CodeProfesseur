@@ -5,6 +5,9 @@ import judge0
 from judge0 import File, Filesystem
 
 
+CPU_TIME_LIMIT = 3.0
+
+
 def write_sample_json(input_json, output_json, submission_path, func_name):
     input_data = json.loads(input_json)
     output_data = json.loads(output_json)
@@ -41,8 +44,10 @@ def exec_bash(input_json, output_json, submission_path, func_name):
             File(name=submission_fileName, content=solution),
         ]
     )
-    result = judge0.run(source_code=wrapper, additional_files=fs)
-    return result.stdout
+    result = judge0.run(
+        source_code=wrapper, additional_files=fs, cpu_time_limit=CPU_TIME_LIMIT
+    )
+    return "Time limit exceeded" if result.stdout == None else result.stdout
 
 
 if __name__ == "__main__":
