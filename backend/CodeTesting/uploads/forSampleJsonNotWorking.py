@@ -1,2 +1,3 @@
 def returnTwo(a: int):
-    return [a, a + 1]
+    while True:
+        a = 1
