@@ -15,7 +15,7 @@ interface Classroom {
 
 interface UserContextType {
     user: User | null;
-    setUser: (user: User) => void;
+    setUser: (user: User | null) => void;
 }
 
 interface ClassroomContextType {

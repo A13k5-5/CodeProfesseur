@@ -42,7 +42,13 @@ function Classrooms() {
   return (
     <div id="main" className="flex flex-col min-h-screen">
       <header className="w-full bg-gray-800 text-white py-4">
-       
+      <Link
+                href={{
+                    pathname: '/student-home',
+            }}
+            >
+                Back to Home
+            </Link>   
       </header>
     <main className="flex flex-row items-center justify-center flex-grow py-2">
       <div>

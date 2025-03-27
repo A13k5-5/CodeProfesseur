@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from "next/router";
 import { userContext, classContext } from '../context';
 import "../styles/globals.css";
+import Link from "next/link";
 
 interface Question {
     name: string;
@@ -94,6 +95,13 @@ function SelectedClassroom() {
         <div id="main" className="flex flex-col min-h-screen">
             <header className="w-full bg-gray-800 text-white py-4">
                 <h1 className="text-center text-xl">Classroom Questions</h1>
+            <Link
+                href={{
+                    pathname: '/student-class',
+            }}
+            >
+                Back to View Classrooms
+            </Link>   
             </header>
             <main className="flex flex-col items-center justify-center flex-grow py-4">
                 {questions.length > 0 ? (
