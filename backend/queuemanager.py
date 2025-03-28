@@ -2,7 +2,7 @@ import threading
 import queue
 
 from database import dbmanager
-from backend.CodeTesting.code_exec import evaluate_submission
+from CodeTesting.code_exec import evaluate_submission
 
 # Queue to hold submissions for processing
 submission_queue = queue.Queue()
