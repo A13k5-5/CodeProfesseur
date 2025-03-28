@@ -5,6 +5,7 @@ __pycache__
 backend/__pycache__
 backend/CodeTesting/__pycache__
 .venv
+venv
 code-prof-frontend/node_modules
 code-prof-frontend/.next
 backend/CodeTesting/uploads
