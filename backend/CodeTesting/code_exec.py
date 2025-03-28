@@ -1,4 +1,3 @@
-import subprocess
 import json
 import os
 import judge0
@@ -23,7 +22,7 @@ def write_sample_json(input_json, output_json, submission_path, func_name):
         json.dump(combined_data, file)
 
 
-def exec_bash(input_json, output_json, submission_path, func_name):
+def evaluate_submission(input_json, output_json, submission_path, func_name):
     write_sample_json(input_json, output_json, submission_path, func_name)
     submission_fileName = os.path.basename(submission_path)
 
