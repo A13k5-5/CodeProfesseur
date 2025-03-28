@@ -19,15 +19,15 @@ def write_sample_json(input_json, output_json, submission_path, func_name):
     }
 
     with open("./CodeTesting/src/sample.json", "w") as file:
-        json.dump(combined_data, file)
+        sample_json = json.dumps(combined_data)
+        file.write(sample_json)
+
+    return sample_json
 
 
 def evaluate_submission(input_json, output_json, submission_path, func_name):
-    write_sample_json(input_json, output_json, submission_path, func_name)
+    sample_json = write_sample_json(input_json, output_json, submission_path, func_name)
     submission_fileName = os.path.basename(submission_path)
-
-    with open("./CodeTesting/src/sample.json", "r") as file:
-        sample_json = file.read()
 
     with open("./CodeTesting/src/test_wrapper.py", "r") as file:
         wrapper = file.read()
@@ -47,11 +47,3 @@ def evaluate_submission(input_json, output_json, submission_path, func_name):
         source_code=wrapper, additional_files=fs, cpu_time_limit=CPU_TIME_LIMIT
     )
     return "Time limit exceeded\n" if result.stdout == None else result.stdout
-
-
-if __name__ == "__main__":
-    input = "[[1], [2], [3], [4], [5], [6], [7]]"
-    output = "[[1, 1], [2, 2], [3, 1], [4, 4], [5, 5], [6, 6], [7, 7]]"
-    path = "./run_tests.sh"
-    output = exec_bash(input, output, "./src/sample.json")
-    print(output)
