@@ -1,3 +1,6 @@
+# This is the sample question that was used during the demo
+
+
 def answer(nums1, nums2):
     i = j = 0
     curLen = 0
@@ -28,6 +31,8 @@ if __name__ == "__main2__":
     print(answer([1, 2], [3, 4]))  # 2.5
     print(answer([1, 1], [1, 1]))  # 1.0
 
+
+# This is how a teacher would generate a test cases for the problem above
 
 import random
 import json

@@ -9,6 +9,8 @@ def get_json_data():
     inputs = sample_json["input"]
     expected_outputs = sample_json["output"]
     func_name = sample_json["func_name"]
+
+    # Get the module name from the submission path
     submission_path = sample_json["submission_path"]
     submission_fileName = os.path.basename(submission_path)
     module_name = os.path.splitext(submission_fileName)[0]
@@ -17,7 +19,6 @@ def get_json_data():
 
 
 def run_tests():
-    # Read the json
     inputs, expected_outputs, func_name, module_name = get_json_data()
 
     # Import the funtion dynamically
@@ -33,7 +34,3 @@ def run_tests():
             )
             return
     print("All tests passed!")
-
-
-if __name__ == "__main__":
-    run_tests()
