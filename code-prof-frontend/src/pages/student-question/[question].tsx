@@ -107,7 +107,7 @@ function Submission(){
         <div id="main" className="flex flex-col min-h-screen bg-gray-100">
             <header className="w-full bg-gray-800 text-white py-4 shadow-md">
                 <div className="container mx-auto px-4 flex justify-between items-center">
-                    <h1 className="text-2xl font-bold">Code Professor</h1>
+                    <h1 className="text-2xl font-bold">CodeProfesseur</h1>
                     <div className="relative">
                         <h2
                             className="text-right text-xl cursor-pointer hover:text-blue-300 transition-colors"
@@ -270,7 +270,7 @@ function Submission(){
             )}
 
             <footer className="bg-gray-800 text-white py-4 text-center">
-                <p>© {new Date().getFullYear()} Code Professor - All rights reserved</p>
+                <p>© {new Date().getFullYear()} CodeProfesseur - All rights reserved</p>
             </footer>
         </div>
     );
